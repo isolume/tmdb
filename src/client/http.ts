@@ -50,7 +50,10 @@ export class HttpClient {
       let body: TMDBErrorBody | undefined;
       try {
         body = (await res.json()) as TMDBErrorBody;
-      } catch {}
+      } catch {
+        // Non-JSON error body; leave `body` as undefined
+      }
+
       const msg = body?.status_message || `TMDB request failed (${res.status})`;
       throw new TMDBError(msg, { status: res.status, code: body?.status_code });
     }
