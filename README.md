@@ -19,23 +19,18 @@ import { TMDB } from "@vo1x/tmdb";
 
 const tmdb = new TMDB({
   apiKey: process.env.TMDB_API_KEY!, // required
-  language: "en-US"                  // optional default
+  language: "en-US"                  // optional default language
 });
 
 async function main() {
-  // Get movie details
+  // ----- Movies -----
   const movie = await tmdb.movie.getById(27205);
   console.log(movie.title); // "Inception"
 
-  // Get movie credits
-  const credits = await tmdb.movie.credits(27205);
-  console.log(credits.cast.map(c => c.name));
+  // ----- TV Series -----
+  const series = await tmdb.tv.getById(1399); // Game of Thrones
+  console.log(series.name);
 
-  // Get recommendations
-  const recs = await tmdb.movie.recommendations(27205, { page: 1 });
-  for (const r of recs.results) {
-    console.log(r.title);
-  }
 }
 
 main();
@@ -44,10 +39,16 @@ main();
 ## API
 
 Currently supports:
-- Movies — details, credits, images, recommendations, similar
+- **Movies** — details, credits, images, recommendations, similar
+- **TV Series** — details, credits, images, recommendations, similar
+
+## More Examples
+See the [`examples/`](./examples) directory for:
+- `movie.example.ts` — movie usage
+- `tv.example.ts` — TV series usage
 
 ## Requirements
-- Node.js 18+ or modern browsers (global fetch available)
+- Node.js 18+ or modern browsers (global `fetch` available)
 - TMDb v3 API key (get one at https://www.themoviedb.org/settings/api)
 
 ## License
