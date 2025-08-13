@@ -122,3 +122,42 @@ export interface EpisodeSummary {
   show_id: number;
   still_path: string | null;
 }
+
+export interface SearchMovie {
+  id: number;
+  title: string;
+  original_title: string;
+  overview: string;
+  release_date?: string;
+  poster_path?: string | null;
+  backdrop_path?: string | null;
+  vote_average?: number;
+  vote_count?: number;
+  genre_ids?: number[];     
+}
+
+export interface SearchTv {
+  id: number;
+  name: string;
+  original_name: string;
+  overview: string;
+  first_air_date?: string;
+  poster_path?: string | null;
+  backdrop_path?: string | null;
+  vote_average?: number;
+  vote_count?: number;
+  genre_ids?: number[];
+}
+
+export interface SearchPerson {
+  id: number;
+  name: string;
+  profile_path?: string | null;
+  known_for_department?: string;
+  known_for?: Array<SearchMovie | SearchTv>;
+}
+
+export type MultiSearchResult =
+  | (SearchMovie & { media_type: "movie" })
+  | (SearchTv & { media_type: "tv" })
+  | (SearchPerson & { media_type: "person" });
