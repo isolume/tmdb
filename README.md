@@ -31,6 +31,10 @@ async function main() {
   const series = await tmdb.tv.getById(1399); // Game of Thrones
   console.log(series.name);
 
+
+  // ----- Search -----
+  const searchResults = await tmdb.search.movie("batman", { language: "en-US" });
+  console.log(searchResults.results.map(m => m.title));
 }
 
 main();
@@ -41,11 +45,13 @@ main();
 Currently supports:
 - **Movies** — details, credits, images, recommendations, similar
 - **TV Series** — details, credits, images, recommendations, similar
+- **Search** — search for movies, TV series, and people
 
 ## More Examples
 See the [`examples/`](./examples) directory for:
 - `movie.example.ts` — movie usage
 - `tv.example.ts` — TV series usage
+- `search.example.ts` — search API usage
 
 ## Requirements
 - Node.js 18+ or modern browsers (global `fetch` available)
