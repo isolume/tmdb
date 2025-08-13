@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { TMDB } from "../src";
+import { MultiSearchResult } from "../dist";
 
 const KEY = process.env.TMDB_API_KEY;
 
@@ -19,6 +20,6 @@ const KEY = process.env.TMDB_API_KEY;
   it("searchMulti returns mixed media types", async () => {
     const res = await tmdb.search.multi("batman");
     expect(Array.isArray(res.results)).toBe(true);
-    expect(res.results.some((r: any) => "media_type" in r)).toBe(true);
+    expect(res.results.some((r: MultiSearchResult) => "media_type" in r)).toBe(true);
   });
 });

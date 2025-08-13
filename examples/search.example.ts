@@ -1,4 +1,5 @@
 import { TMDB } from "@vo1x/tmdb";
+import type { MultiSearchResult } from "@vo1x/tmdb";
 
 async function main() {
   const tmdb = new TMDB({
@@ -38,7 +39,7 @@ async function main() {
   console.log(
     `\n[Multi] total_results=${multiRes.total_results} page=${multiRes.page}/${multiRes.total_pages}`
   );
-  multiRes.results.slice(0, 5).forEach((r: any, i: number) => {
+  multiRes.results.slice(0, 5).forEach((r: MultiSearchResult, i: number) => {
     const title = r.media_type === "movie" ? r.title : r.media_type === "tv" ? r.name : r.name;
     console.log(`  #${i + 1}: [${r.media_type}] ${title} (id=${r.id})`);
   });

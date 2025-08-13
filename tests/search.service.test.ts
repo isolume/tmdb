@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { TMDB } from "../src"; 
+import { TMDB } from "../src";
+import { MultiSearchResult } from "../src";
 
 function jsonResponse(data: unknown, init?: ResponseInit) {
   return new Response(JSON.stringify(data), {
@@ -111,7 +112,7 @@ describe("SearchService (unit)", () => {
     const res = await tmdb.search.multi("a");
 
     expect(res.results.length).toBe(3);
-    const types = res.results.map((r: any) => r.media_type);
+    const types = res.results.map((r: MultiSearchResult) => r.media_type);
     expect(types).toContain("movie");
     expect(types).toContain("tv");
     expect(types).toContain("person");
