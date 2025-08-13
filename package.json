@@ -2,6 +2,15 @@
   "name": "@vo1x/tmdb",
   "version": "0.0.1-alpha.2",
   "description": "Unofficial TypeScript/JavaScript SDK for The Movie Database (TMDb) API v3.",
+  "author": "volx",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vo1x/tmdb.git"
+  },
+  "homepage": "https://github.com/vo1x/tmdb#readme",
+  "bugs": {
+    "url": "https://github.com/vo1x/tmdb/issues"
+  },
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
