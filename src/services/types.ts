@@ -133,7 +133,7 @@ export interface SearchMovie {
   backdrop_path?: string | null;
   vote_average?: number;
   vote_count?: number;
-  genre_ids?: number[];     
+  genre_ids?: number[];
 }
 
 export interface SearchTv {
@@ -161,3 +161,28 @@ export type MultiSearchResult =
   | (SearchMovie & { media_type: "movie" })
   | (SearchTv & { media_type: "tv" })
   | (SearchPerson & { media_type: "person" });
+
+export type TrendingTimeWindow = "day" | "week";
+
+export type TrendingAllItem =
+  | (SearchMovie & {
+      media_type: "movie";
+      adult?: boolean;
+      popularity?: number;
+      video?: boolean;
+    })
+  | (SearchTv & {
+      media_type: "tv";
+      adult?: boolean;
+      popularity?: number;
+      origin_country?: string[];
+    })
+  | (SearchPerson & {
+      media_type: "person";
+      adult?: boolean;
+      gender?: number;
+      popularity?: number;
+      known_for?: Array<SearchMovie | SearchTv>;
+    });
+
+export type TrendingAllResponse = Paged<TrendingAllItem>;
