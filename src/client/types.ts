@@ -1,6 +1,6 @@
 export interface TMDBOptions {
   /** TMDb v3 API key. **/
-  apiKey?: string;
+  apiKey: string;
 
   /** Default language, e.g. "en-US". */
   language?: string;
