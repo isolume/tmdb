@@ -1,12 +1,19 @@
 import type { TMDBOptions } from "./client";
 import { HttpClient } from "./client";
-import { MovieService, TvService, SearchService, TrendingService } from "./services";
+import {
+  MovieService,
+  TvService,
+  SearchService,
+  TrendingService,
+  ConfigurationService,
+} from "./services";
 
 export class TMDB {
   readonly movie: MovieService;
   readonly tv: TvService;
   readonly search: SearchService;
   readonly trending: TrendingService;
+  readonly config: ConfigurationService;
 
   constructor(options: TMDBOptions) {
     if (!options.apiKey) {
@@ -17,6 +24,7 @@ export class TMDB {
     this.tv = new TvService(http);
     this.search = new SearchService(http);
     this.trending = new TrendingService(http);
+    this.config = new ConfigurationService(http);
   }
 }
 
