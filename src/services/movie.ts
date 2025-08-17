@@ -1,26 +1,36 @@
 import { HttpClient } from "../client";
-import type { Paged, Movie, Credits, ImagesResponse } from "./types";
+import type {
+  Paged,
+  Movie,
+  MovieCredits,
+  Images,
+  GetMovieQuery,
+  GetMovieCreditsQuery,
+  GetMovieImagesQuery,
+  GetMovieRecommendationsQuery,
+  GetMovieSimilarQuery,
+} from "../types";
 
 export class MovieService {
   constructor(private http: HttpClient) {}
 
-  getById(id: number, opts?: { append_to_response?: string; language?: string }) {
+  getById(id: number, opts?: GetMovieQuery) {
     return this.http.get<Movie>(`/movie/${id}`, opts);
   }
 
-  credits(id: number, opts?: { language?: string }) {
-    return this.http.get<Credits>(`/movie/${id}/credits`, opts);
+  credits(id: number, opts?: GetMovieCreditsQuery) {
+    return this.http.get<MovieCredits>(`/movie/${id}/credits`, opts);
   }
 
-  images(id: number, opts?: { include_image_language?: string; language?: string }) {
-    return this.http.get<ImagesResponse>(`/movie/${id}/images`, opts);
+  images(id: number, opts?: GetMovieImagesQuery) {
+    return this.http.get<Images>(`/movie/${id}/images`, opts);
   }
 
-  recommendations(id: number, opts?: { page?: number; language?: string }) {
+  recommendations(id: number, opts?: GetMovieRecommendationsQuery) {
     return this.http.get<Paged<Movie>>(`/movie/${id}/recommendations`, opts);
   }
 
-  similar(id: number, opts?: { page?: number; language?: string }) {
+  similar(id: number, opts?: GetMovieSimilarQuery) {
     return this.http.get<Paged<Movie>>(`/movie/${id}/similar`, opts);
   }
 }

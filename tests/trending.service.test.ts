@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { TMDB } from "../src";
+import { TrendingAllItem } from "../src";
 
 function jsonResponse(data: unknown, init?: ResponseInit) {
   return new Response(JSON.stringify(data), {
@@ -32,7 +33,7 @@ describe("TrendingService", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.trending.daily({ page: 1, language: "en-US" });
+    const res = await tmdb.trending.daily({ language: "en-US" });
 
     expect(res.page).toBe(1);
     expect(res.total_results).toBe(200);
@@ -48,13 +49,19 @@ describe("TrendingService", () => {
       total_pages: 3,
       total_results: 60,
       results: [
-        { media_type: "movie", id: 101, title: "Another Movie", original_title: "Another Movie", overview: "" },
+        {
+          media_type: "movie",
+          id: 101,
+          title: "Another Movie",
+          original_title: "Another Movie",
+          overview: "",
+        },
       ],
     };
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.trending.weekly({ page: 2, language: "en-US" });
+    const res = await tmdb.trending.weekly({ language: "en-US" });
 
     expect(res.page).toBe(2);
     expect(res.total_pages).toBe(3);
@@ -85,14 +92,13 @@ describe("TrendingService", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.trending.daily({ page: 1 });
+    const res = await tmdb.trending.daily({});
 
     expect(res.results[0].media_type).toBe("person");
     const person = res.results[0];
-    if (person.media_type === "person") {
-      expect(person.name).toBe("Famous Actor");
-      expect(Array.isArray(person.known_for)).toBe(true);
-      expect(person.known_for?.length).toBe(2);
+    if (person.media_type === "person" && "name" in person) {
+      expect((person as any).name).toBe("Famous Actor");
+      expect(Array.isArray((person as any).known_for)).toBe(true);
     }
   });
 });

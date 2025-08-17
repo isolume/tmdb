@@ -1,23 +1,28 @@
 import { TMDB } from "@vo1x/tmdb";
 import type { TMDBConfiguration } from "@vo1x/tmdb";
 
-// Create the client (user provides apiKey + optional defaults)
 const tmdb = new TMDB({
-  apiKey: "YOUR_TMDB_API_KEY", // 👈 replace with your real API key
+  apiKey: "YOUR_TMDB_API_KEY",
   language: "en-US",
   region: "US",
 });
 
 async function main() {
-  // Fetch TMDB configuration from /configuration endpoint
   const conf: TMDBConfiguration = await tmdb.config.get();
 
-  console.log("Base URL:", conf.images.secure_base_url);
-  console.log("Poster sizes:", conf.images.poster_sizes.join(", "));
+  // Guard because the OpenAPI type marks images as optional
+  if (!conf.images) {
+    throw new Error("TMDB configuration did not include `images`.");
+  }
+
+  const { secure_base_url, poster_sizes } = conf.images;
+
+  console.log("Base URL:", secure_base_url);
+  console.log("Poster sizes:", (poster_sizes ?? []).join(", "));
 
   // Example: building a poster URL
   const posterPath = "/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg"; // sample path
-  const posterUrl = `${conf.images.secure_base_url}w500${posterPath}`;
+  const posterUrl = `${secure_base_url}w500${posterPath}`;
   console.log("Poster URL:", posterUrl);
 }
 

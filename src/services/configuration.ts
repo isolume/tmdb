@@ -1,20 +1,24 @@
-import { HttpClient } from "../client";
+import type { HttpClient } from "../client";
 import type {
   TMDBConfiguration,
   Country,
   JobGroup,
   Language,
   TimezoneGroup,
-} from "./types";
+  PrimaryTranslationsResponse,
+  GetConfigurationQuery,
+  GetCountriesQuery,
+  GetLanguagesQuery,
+} from "../types";
 
 export class ConfigurationService {
   constructor(private http: HttpClient) {}
 
-  get(opts?: { language?: string }) {
+  get(opts?: GetConfigurationQuery) {
     return this.http.get<TMDBConfiguration>("/configuration", opts);
   }
 
-  countries(opts?: { language?: string }) {
+  countries(opts?: GetCountriesQuery) {
     return this.http.get<Country[]>("/configuration/countries", opts);
   }
 
@@ -22,12 +26,12 @@ export class ConfigurationService {
     return this.http.get<JobGroup[]>("/configuration/jobs");
   }
 
-  languages(opts?: { language?: string }) {
-    return this.http.get<Language[]>("/configuration/languages", opts);
+  languages() {
+    return this.http.get<Language[]>("/configuration/languages");
   }
 
   primaryTranslations() {
-    return this.http.get<string[]>("/configuration/primary_translations");
+    return this.http.get<PrimaryTranslationsResponse>("/configuration/primary_translations");
   }
 
   timezones() {

@@ -15,11 +15,11 @@ async function main() {
 
   // Credits
   const credits = await tmdb.tv.credits(seriesId, { language: "en-US" });
-  console.log("[Cast count]", credits.cast.length);
+  console.log("[Cast count]", credits.cast?.length ?? 0);
 
   // Images
   const images = await tmdb.tv.images(seriesId, { include_image_language: "en,null" });
-  console.log("[Backdrops]", images.backdrops.length);
+  console.log("[Backdrops]", images.backdrops?.length ?? 0);
 
   // Recommendations & Similar
   const recs = await tmdb.tv.recommendations(seriesId, { page: 1 });

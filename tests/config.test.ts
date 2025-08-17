@@ -1,4 +1,3 @@
-
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { TMDB } from "../src";
 
@@ -37,10 +36,10 @@ describe("ConfigurationService", () => {
     const tmdb = new TMDB({ apiKey: "ABC" });
     const res = await tmdb.config.get();
 
-    expect(res.images.secure_base_url).toMatch(/^https:/);
-    expect(Array.isArray(res.images.poster_sizes)).toBe(true);
+    expect(res.images!.secure_base_url).toMatch(/^https:/);
+    expect(Array.isArray(res.images!.poster_sizes)).toBe(true);
     expect(Array.isArray(res.change_keys)).toBe(true);
-    expect(res.change_keys.length).toBeGreaterThan(0);
+    expect(res.change_keys!.length).toBeGreaterThan(0);
   });
 
   it("countries returns an array and supports language parameter", async () => {
@@ -85,13 +84,12 @@ describe("ConfigurationService", () => {
     const spy = vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.config.languages({ language: "en-US" });
+    const res = await tmdb.config.languages();
 
     expect(Array.isArray(res)).toBe(true);
     expect(res[1].iso_639_1).toBe("fr");
     const url = (spy.mock.calls[0]?.[0] as string) ?? "";
     expect(url).toContain("/configuration/languages");
-    expect(url).toContain("language=en-US");
   });
 
   it("primaryTranslations returns an array of locale strings", async () => {

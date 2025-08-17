@@ -3,7 +3,7 @@ import { TMDB } from "@vo1x/tmdb";
 async function main() {
   const tmdb = new TMDB({ apiKey: process.env.TMDB_TOKEN! });
 
-  // Movie details
+  // Movie details with appended extras
   const movie = await tmdb.movie.getById(693134, {
     language: "en-US",
     append_to_response: "credits,images,recommendations,similar",
@@ -12,11 +12,11 @@ async function main() {
 
   // Credits
   const credits = await tmdb.movie.credits(movie.id, { language: "en-US" });
-  console.log("[Top billed]", credits.cast[0]?.name);
+  console.log("[Top billed]", credits.cast?.[0]?.name);
 
   // Images
   const images = await tmdb.movie.images(movie.id, { include_image_language: "en,null" });
-  console.log("[Posters]", images.posters.length);
+  console.log("[Posters]", images.posters?.length ?? 0);
 
   // Recommendations & Similar
   const recs = await tmdb.movie.recommendations(movie.id, { page: 1 });

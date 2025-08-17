@@ -30,4 +30,37 @@ export class TMDB {
 
 export type { TMDBOptions } from "./client";
 export { TMDBError } from "./client";
-export * from "./services";
+
+/** ✅ Only re-export the public types (no SDK internals) */
+export type {
+  Movie,
+  MovieCredits,
+  Images,
+  ImageFile,
+  Genre,
+  TvShow,
+  TvCredits,
+  TvImages,
+  EpisodeSummary,
+  Person,
+  SearchMovie,
+  SearchTv,
+  SearchPerson,
+  MultiSearchResult,
+  TrendingAllItem,
+  TrendingMovieItem,
+  TrendingTvItem,
+  TrendingPersonItem,
+  TrendingItem,
+  TrendingResponse,
+  TrendingTimeWindow,
+  TMDBConfiguration,
+  Country,
+  Language,
+  JobGroup,
+  TimezoneGroup,
+  PrimaryTranslationsResponse,
+  CreditCastMember,
+  CreditCrewMember,
+  Paged
+} from "./types";
