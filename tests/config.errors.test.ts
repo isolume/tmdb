@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { TMDB, TMDBError } from "../src";
 
-function response(body: any, init?: ResponseInit) {
+function response(body: unknown, init?: ResponseInit) {
   const isString = typeof body === "string";
   return new Response(isString ? body : JSON.stringify(body), {
     status: 200,
@@ -113,7 +113,7 @@ describe("ConfigurationService (error cases)", () => {
     );
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    await expect(tmdb.config.countries({ language: "en_US" as any }))
+    await expect(tmdb.config.countries({ language: "en_US" }))
       .rejects.toBeInstanceOf(TMDBError);
 
     expect(spy).toHaveBeenCalled();
