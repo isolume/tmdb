@@ -31,33 +31,44 @@ export class HttpClient {
     return s ? `?${s}` : "";
   }
 
-  async get<T>(path: string, params?: Record<string, unknown>): Promise<T> {
-    const query = {
-      ...params,
-      language: params?.language ?? this.language,
-      region: params?.region ?? this.region,
-      ...(this.apiKey ? { api_key: this.apiKey } : {}),
-    };
+async get<T>(path: string, params?: Record<string, unknown>): Promise<T> {
+  const query = {
+    ...params,
+    language: params?.language ?? this.language,
+    region: params?.region ?? this.region,
+    ...(this.apiKey ? { api_key: this.apiKey } : {}),
+  };
 
-    const url = this.baseUrl + path + this.qs(query);
+  const url = this.baseUrl + path + this.qs(query);
 
-    const res = await fetch(url, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-    });
+  const res = await fetch(url, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+  });
 
-    if (!res.ok) {
-      let body: TMDBErrorBody | undefined;
-      try {
-        body = (await res.json()) as TMDBErrorBody;
-      } catch {
-        // Non-JSON error body; leave `body` as undefined
-      }
-
-      const msg = body?.status_message || `TMDB request failed (${res.status})`;
-      throw new TMDBError(msg, { status: res.status, code: body?.status_code });
+  if (!res.ok) {
+    let body: TMDBErrorBody | undefined;
+    try {
+      body = (await res.json()) as TMDBErrorBody;
+    } catch {
+      // ignore parse error for error responses
     }
-
-    return (await res.json()) as T;
+    const msg = body?.status_message || `TMDB request failed (${res.status})`;
+    throw new TMDBError(msg, { status: res.status, code: body?.status_code });
   }
+
+  const ctype = res.headers.get("content-type") || "";
+  const isJson = ctype.toLowerCase().includes("application/json");
+  if (!isJson) {
+    const msg = "Expected JSON response but received a different content type";
+    throw new TMDBError(msg, { status: res.status });
+  }
+
+  try {
+    return (await res.json()) as T;
+  } catch {
+    throw new TMDBError("Failed to parse JSON from TMDB", { status: res.status });
+  }
+}
+
 }

@@ -31,12 +31,18 @@ async function main() {
   const series = await tmdb.tv.getById(1399); // Game of Thrones
   console.log(series.name);
 
-
   // ----- Search -----
   const searchResults = await tmdb.search.movie("batman", { language: "en-US" });
   console.log(searchResults.results.map(m => m.title));
-}
 
+  // ----- Trending -----
+  const trending = await tmdb.trending.all("day");
+  console.log(trending.results.slice(0, 3));
+
+  // ----- Configuration -----
+  const config = await tmdb.configuration.get();
+  console.log(config.images.secure_base_url); // e.g. https://image.tmdb.org/t/p/
+}
 main();
 ```
 
@@ -47,6 +53,7 @@ Currently supports:
 - **TV Series** — details, credits, images, recommendations, similar
 - **Search** — search for movies, TV series, and people
 - **Trending** — get the trending movies, TV shows and people
+- **Config** — fetch API configuration, countries, jobs, languages, translations, and timezones
 
 ## More Examples
 See the [`examples/`](./examples) directory for:
@@ -54,6 +61,7 @@ See the [`examples/`](./examples) directory for:
 - `tv.example.ts` — TV series usage
 - `search.example.ts` — search API usage
 - `trending.example.ts` — trending API usage
+- `config.example.ts` — configuration API usage
 
 ## Requirements
 - Node.js 18+ or modern browsers (global `fetch` available)
