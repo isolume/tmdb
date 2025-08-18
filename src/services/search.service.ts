@@ -1,32 +1,58 @@
 import type { HttpClient } from "../client";
 import type {
-  Paged,
-  SearchMovie,
-  SearchTv,
-  SearchPerson,
-  MultiSearchResult,
-  SearchMovieQuery,
-  SearchTvQuery,
-  SearchPersonQuery,
-  MultiSearchQuery,
-} from "../types";
+  SearchMovieResponse,
+  SearchTvResponse,
+  SearchPersonResponse,
+  MultiSearchResponse,
+  MovieSearchOptions,
+  TvSearchOptions,
+  PersonSearchOptions,
+  MultiSearchOptions,
+} from "../types/search";
 
+/**
+ * Internal service for TMDB search endpoints.
+ * Not exposed to consumers - use TMDB client's search methods instead.
+ * @internal
+ */
 export class SearchService {
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
-  movie(query: string, opts?: Omit<SearchMovieQuery, "query">) {
-    return this.http.get<Paged<SearchMovie>>("/search/movie", { query, ...opts });
+  async searchMovies(query: string, options?: MovieSearchOptions): Promise<SearchMovieResponse> {
+    this.validateQuery(query);
+    return this.http.get<SearchMovieResponse>("/search/movie", {
+      query: query.trim(),
+      ...options,
+    });
   }
 
-  tv(query: string, opts?: Omit<SearchTvQuery, "query">) {
-    return this.http.get<Paged<SearchTv>>("/search/tv", { query, ...opts });
+  async searchTv(query: string, options?: TvSearchOptions): Promise<SearchTvResponse> {
+    this.validateQuery(query);
+    return this.http.get<SearchTvResponse>("/search/tv", {
+      query: query.trim(),
+      ...options,
+    });
   }
 
-  people(query: string, opts?: Omit<SearchPersonQuery, "query">) {
-    return this.http.get<Paged<SearchPerson>>("/search/person", { query, ...opts });
+  async searchPeople(query: string, options?: PersonSearchOptions): Promise<SearchPersonResponse> {
+    this.validateQuery(query);
+    return this.http.get<SearchPersonResponse>("/search/person", {
+      query: query.trim(),
+      ...options,
+    });
   }
 
-  multi(query: string, opts?: Omit<MultiSearchQuery, "query">) {
-    return this.http.get<Paged<MultiSearchResult>>("/search/multi", { query, ...opts });
+  async searchMulti(query: string, options?: MultiSearchOptions): Promise<MultiSearchResponse> {
+    this.validateQuery(query);
+    return this.http.get<MultiSearchResponse>("/search/multi", {
+      query: query.trim(),
+      ...options,
+    });
+  }
+
+  private validateQuery(query: string): void {
+    if (!query?.trim()) {
+      throw new Error("Search query cannot be empty");
+    }
   }
 }

@@ -1,74 +1,181 @@
 import type { TMDBOptions } from "./types";
 import { TMDBError, type TMDBErrorBody } from "./error";
 
-const DEFAULT_BASE = "https://api.themoviedb.org/3";
+const DEFAULT_BASE_URL = "https://api.themoviedb.org/3";
+const REQUEST_TIMEOUT = 10000; // 10 seconds
 
+/**
+ * Internal HTTP client for TMDB API requests.
+ * Handles authentication, error responses, and request formatting.
+ * @internal
+ */
 export class HttpClient {
-  private baseUrl: string;
-  private apiKey?: string;
-  private language?: string;
-  private region?: string;
+  private readonly baseUrl: string;
+  private readonly apiKey?: string;
+  private readonly language?: string;
+  private readonly region?: string;
+  private readonly timeout: number;
 
-  constructor(opts: TMDBOptions) {
-    this.baseUrl = opts.baseUrl ?? DEFAULT_BASE;
-    this.apiKey = opts.apiKey;
-    this.language = opts.language;
-    this.region = opts.region;
+  constructor(options: TMDBOptions) {
+    this.baseUrl = options.baseUrl ?? DEFAULT_BASE_URL;
+    this.apiKey = options.apiKey;
+    this.language = options.language;
+    this.region = options.region;
+    this.timeout = options.timeout ?? REQUEST_TIMEOUT;
   }
 
-  private qs(params?: Record<string, unknown>): string {
+  /**
+   * Make a GET request to the TMDB API.
+   *
+   * @param path - API endpoint path (e.g., "/movie/550")
+   * @param params - Query parameters to include in the request
+   * @returns Promise resolving to the parsed JSON response
+   * @throws {TMDBError} When the request fails or returns an error status
+   */
+  async get<T>(path: string, params?: Record<string, unknown>): Promise<T> {
+    const queryParams = this.buildQueryParams(params);
+    const url = this.baseUrl + path + this.buildQueryString(queryParams);
+
+    try {
+      const response = await this.fetchWithTimeout(url);
+
+      if (!response.ok) {
+        await this.handleErrorResponse(response);
+      }
+
+      return await this.parseJsonResponse<T>(response);
+    } catch (error) {
+      // Re-throw TMDBError instances as-is
+      if (error instanceof TMDBError) {
+        throw error;
+      }
+
+      // Handle network errors, timeouts, etc.
+      const message = error instanceof Error ? error.message : "Unknown error occurred";
+      throw new TMDBError(`Network error: ${message}`, { status: 0 });
+    }
+  }
+
+  /**
+   * Build query parameters, merging request params with client defaults.
+   */
+  private buildQueryParams(params?: Record<string, unknown>): Record<string, unknown> {
+    return {
+      ...params,
+      language: params?.language ?? this.language,
+      region: params?.region ?? this.region,
+      ...(this.apiKey ? { api_key: this.apiKey } : {}),
+    };
+  }
+
+  /**
+   * Convert parameters object to URL query string.
+   * Handles arrays by joining with commas, filters out empty values.
+   */
+  private buildQueryString(params?: Record<string, unknown>): string {
     if (!params) return "";
-    const sp = new URLSearchParams();
-    for (const [k, v] of Object.entries(params)) {
-      if (v === undefined || v === null || v === "") continue;
-      if (Array.isArray(v)) {
-        if (v.length) sp.set(k, v.join(","));
+
+    const searchParams = new URLSearchParams();
+
+    for (const [key, value] of Object.entries(params)) {
+      if (value === undefined || value === null || value === "") {
         continue;
       }
-      sp.set(k, String(v));
+
+      if (Array.isArray(value)) {
+        if (value.length > 0) {
+          searchParams.set(key, value.join(","));
+        }
+        continue;
+      }
+
+      searchParams.set(key, String(value));
     }
-    const s = sp.toString();
-    return s ? `?${s}` : "";
+
+    const queryString = searchParams.toString();
+    return queryString ? `?${queryString}` : "";
   }
 
-async get<T>(path: string, params?: Record<string, unknown>): Promise<T> {
-  const query = {
-    ...params,
-    language: params?.language ?? this.language,
-    region: params?.region ?? this.region,
-    ...(this.apiKey ? { api_key: this.apiKey } : {}),
-  };
+  /**
+   * Fetch with timeout support using AbortController.
+   */
+  private async fetchWithTimeout(url: string): Promise<Response> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
-  const url = this.baseUrl + path + this.qs(query);
-
-  const res = await fetch(url, {
-    method: "GET",
-    headers: { Accept: "application/json" },
-  });
-
-  if (!res.ok) {
-    let body: TMDBErrorBody | undefined;
     try {
-      body = (await res.json()) as TMDBErrorBody;
-    } catch {
-      // ignore parse error for error responses
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "User-Agent": "tmdb-client/1.0.0", 
+        },
+        signal: controller.signal,
+      });
+
+      return response;
+    } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        throw new TMDBError(`Request timeout after ${this.timeout}ms`, { status: 0 });
+      }
+      throw error;
+    } finally {
+      clearTimeout(timeoutId);
     }
-    const msg = body?.status_message || `TMDB request failed (${res.status})`;
-    throw new TMDBError(msg, { status: res.status, code: body?.status_code });
   }
 
-  const ctype = res.headers.get("content-type") || "";
-  const isJson = ctype.toLowerCase().includes("application/json");
-  if (!isJson) {
-    const msg = "Expected JSON response but received a different content type";
-    throw new TMDBError(msg, { status: res.status });
+  /**
+   * Handle error responses from TMDB API.
+   * Attempts to parse TMDB error format and throws structured TMDBError.
+   */
+  private async handleErrorResponse(response: Response): Promise<never> {
+    let errorBody: TMDBErrorBody | undefined;
+    let message = `HTTP ${response.status}: ${response.statusText}`;
+
+    try {
+      const contentType = response.headers.get("content-type") || "";
+      if (contentType.toLowerCase().includes("application/json")) {
+        errorBody = (await response.json()) as TMDBErrorBody;
+
+        if (errorBody.status_message) {
+          message = errorBody.status_message;
+        }
+      }
+    } catch {
+    }
+
+    if (response.status === 401) {
+      message = "Invalid API key. Please check your TMDB credentials.";
+    } else if (response.status === 429) {
+      message = "Rate limit exceeded. Please slow down your requests.";
+    } else if (response.status >= 500) {
+      message = "TMDB server error. Please try again later.";
+    }
+
+    throw new TMDBError(message, {
+      status: response.status,
+      code: errorBody?.status_code,
+      body: errorBody,
+    });
   }
 
-  try {
-    return (await res.json()) as T;
-  } catch {
-    throw new TMDBError("Failed to parse JSON from TMDB", { status: res.status });
+  /**
+   * Parse JSON response with proper error handling.
+   */
+  private async parseJsonResponse<T>(response: Response): Promise<T> {
+    const contentType = response.headers.get("content-type") || "";
+
+    if (!contentType.toLowerCase().includes("application/json")) {
+      throw new TMDBError("Expected JSON response but received different content type", {
+        status: response.status,
+      });
+    }
+
+    try {
+      return (await response.json()) as T;
+    } catch {
+      throw new TMDBError("Failed to parse JSON response from TMDB", { status: response.status });
+    }
   }
 }
 
-}
