@@ -8,7 +8,7 @@ async function main() {
   });
 
   // Movie search
-  const movieRes = await tmdb.search.movie("batman", { page: 1, include_adult: false });
+  const movieRes = await tmdb.search.movies("batman", { page: 1, include_adult: false });
   console.log(
     `\n[Movie] total_results=${movieRes.total_results} page=${movieRes.page}/${movieRes.total_pages}`
   );

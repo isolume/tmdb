@@ -7,7 +7,7 @@ const REQUEST_TIMEOUT = 10000; // 10 seconds
 /**
  * Internal HTTP client for TMDB API requests.
  * Handles authentication, error responses, and request formatting.
- * @internal
+ * 
  */
 export class HttpClient {
   private readonly baseUrl: string;
