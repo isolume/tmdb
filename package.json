@@ -1,6 +1,6 @@
 {
   "name": "@vo1x/tmdb",
-  "version": "0.1.0-beta.1",
+  "version": "1.0.0-beta.1",
   "description": "Unofficial TypeScript/JavaScript SDK for The Movie Database (TMDb) API v3.",
   "author": "volx",
   "repository": {
