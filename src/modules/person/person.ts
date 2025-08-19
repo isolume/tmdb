@@ -1,5 +1,4 @@
 import type { paths } from "../../generated/tmdb";
-import type { Paged } from "../../shared/common";
 
 type Prettify<T> = { [K in keyof T]: T[K] } & {};
 
@@ -35,8 +34,8 @@ export type CombinedCrewCredit = NonNullable<_PersonCombinedCreditsResponse["cre
 /** Full response for a person's images. */
 export type PersonImagesResponse = _PersonImagesResponse;
 /** Full response for a person's combined credits (cast & crew). */
-export interface PersonCombinedCreditsResponse
-  extends Paged<CombinedCastCredit | CombinedCrewCredit> {}
+// export interface PersonCombinedCreditsResponse
+//   extends Paged<CombinedCastCredit | CombinedCrewCredit> {}
 
 /** Optional parameters for fetching a person by ID. */
 export type GetPersonOptions = Prettify<_PersonByIdQuery>;

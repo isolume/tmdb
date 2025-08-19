@@ -11,40 +11,40 @@ import type {
   GetMovieOptions,
   GetMovieCreditsOptions,
   GetMovieImagesOptions,
-  GetMovieRecommendationsOptions,
-  GetMovieSimilarOptions,
+  GetRecommendedMoviesOptions,
+  GetSimilarMoviesOptions,
   Movie,
   MovieCredits,
   MovieImages,
-  MovieRecommendationsResponse,
-  MovieSimilarResponse,
+  RecommendedMovies,
+  SimilarMovies,
 } from "./modules/movies/types";
 
 import type {
-  GetTvOptions,
+  GetTvShowOptions,
   GetTvCreditsOptions,
   GetTvImagesOptions,
-  GetTvRecommendationsOptions,
-  GetTvSimilarOptions,
+  GetRecommendedTvShowsOptions,
+  GetSimilarTvShowsOptions,
   TvShow,
   TvCredits,
   TvImages,
-  TvRecommendationsResponse,
-  TvSimilarResponse,
+  RecommendedTvShows,
+  SimilarTvShows,
 } from "./modules/tv/types";
 
 import type {
-  MovieSearchOptions,
-  TvSearchOptions,
-  PersonSearchOptions,
-  MultiSearchOptions,
-  SearchMovieResponse,
-  SearchTvResponse,
-  SearchPersonResponse,
-  MultiSearchResponse,
+  GetMovieSearchOptions,
+  GetTvSearchOptions,
+  GetPeopleSearchOptions,
+  GetMultiSearchOptions,
+  MovieSearchResults,
+  TvSearchResults,
+  PeopleSearchResults,
+  MultiSearchResults,
 } from "./modules/search/types";
 
-import type { GetTrendingAllOptions, TrendingAllResponse } from "./modules/trending/types";
+import type { GetTrendingAllOptions, TrendingAll } from "./modules/trending/types";
 
 import type {
   GetConfigurationOptions,
@@ -65,25 +65,25 @@ export class TMDB {
     images: (id: number, options?: GetMovieImagesOptions) => Promise<MovieImages>;
     recommendations: (
       id: number,
-      options?: GetMovieRecommendationsOptions
-    ) => Promise<MovieRecommendationsResponse>;
-    similar: (id: number, options?: GetMovieSimilarOptions) => Promise<MovieSimilarResponse>;
+      options?: GetRecommendedMoviesOptions
+    ) => Promise<RecommendedMovies>;
+    similar: (id: number, options?: GetSimilarMoviesOptions) => Promise<SimilarMovies>;
   };
 
   readonly tv: {
-    get: (id: number, options?: GetTvOptions) => Promise<TvShow>;
+    get: (id: number, options?: GetTvShowOptions) => Promise<TvShow>;
     credits: (id: number, options?: GetTvCreditsOptions) => Promise<TvCredits>;
     images: (id: number, options?: GetTvImagesOptions) => Promise<TvImages>;
     recommendations: (
       id: number,
-      options?: GetTvRecommendationsOptions
-    ) => Promise<TvRecommendationsResponse>;
-    similar: (id: number, options?: GetTvSimilarOptions) => Promise<TvSimilarResponse>;
+      options?: GetRecommendedTvShowsOptions
+    ) => Promise<RecommendedTvShows>;
+    similar: (id: number, options?: GetSimilarTvShowsOptions) => Promise<SimilarTvShows>;
   };
 
   readonly trending: {
-    daily: (options?: GetTrendingAllOptions) => Promise<TrendingAllResponse>;
-    weekly: (options?: GetTrendingAllOptions) => Promise<TrendingAllResponse>;
+    daily: (options?: GetTrendingAllOptions) => Promise<TrendingAll>;
+    weekly: (options?: GetTrendingAllOptions) => Promise<TrendingAll>;
   };
 
   readonly configuration: {
@@ -95,10 +95,10 @@ export class TMDB {
   };
 
   readonly search: {
-    movies: (query: string, options?: MovieSearchOptions) => Promise<SearchMovieResponse>;
-    tv: (query: string, options?: TvSearchOptions) => Promise<SearchTvResponse>;
-    people: (query: string, options?: PersonSearchOptions) => Promise<SearchPersonResponse>;
-    multi: (query: string, options?: MultiSearchOptions) => Promise<MultiSearchResponse>;
+    movies: (query: string, options?: GetMovieSearchOptions) => Promise<MovieSearchResults>;
+    tv: (query: string, options?: GetTvSearchOptions) => Promise<TvSearchResults>;
+    people: (query: string, options?: GetPeopleSearchOptions) => Promise<PeopleSearchResults>;
+    multi: (query: string, options?: GetMultiSearchOptions) => Promise<MultiSearchResults>;
   };
 
   private readonly http: HttpClient;

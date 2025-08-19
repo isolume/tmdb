@@ -1,13 +1,13 @@
 import type { HttpClient } from "../../core";
 import type {
-  SearchMovieResponse,
-  SearchTvResponse,
-  SearchPersonResponse,
-  MultiSearchResponse,
-  MovieSearchOptions,
-  TvSearchOptions,
-  PersonSearchOptions,
-  MultiSearchOptions,
+  MovieSearchResults,
+  TvSearchResults,
+  PeopleSearchResults,
+  MultiSearchResults,
+  GetMovieSearchOptions,
+  GetTvSearchOptions,
+  GetPeopleSearchOptions,
+  GetMultiSearchOptions,
 } from "./types";
 
 /**
@@ -18,33 +18,36 @@ import type {
 export class SearchService {
   constructor(private readonly http: HttpClient) {}
 
-  async searchMovies(query: string, options?: MovieSearchOptions): Promise<SearchMovieResponse> {
+  async searchMovies(query: string, options?: GetMovieSearchOptions): Promise<MovieSearchResults> {
     this.validateQuery(query);
-    return this.http.get<SearchMovieResponse>("/search/movie", {
+    return this.http.get<MovieSearchResults>("/search/movie", {
       query: query.trim(),
       ...options,
     });
   }
 
-  async searchTv(query: string, options?: TvSearchOptions): Promise<SearchTvResponse> {
+  async searchTv(query: string, options?: GetTvSearchOptions): Promise<TvSearchResults> {
     this.validateQuery(query);
-    return this.http.get<SearchTvResponse>("/search/tv", {
+    return this.http.get<TvSearchResults>("/search/tv", {
       query: query.trim(),
       ...options,
     });
   }
 
-  async searchPeople(query: string, options?: PersonSearchOptions): Promise<SearchPersonResponse> {
+  async searchPeople(
+    query: string,
+    options?: GetPeopleSearchOptions
+  ): Promise<PeopleSearchResults> {
     this.validateQuery(query);
-    return this.http.get<SearchPersonResponse>("/search/person", {
+    return this.http.get<PeopleSearchResults>("/search/person", {
       query: query.trim(),
       ...options,
     });
   }
 
-  async searchMulti(query: string, options?: MultiSearchOptions): Promise<MultiSearchResponse> {
+  async searchMulti(query: string, options?: GetMultiSearchOptions): Promise<MultiSearchResults> {
     this.validateQuery(query);
-    return this.http.get<MultiSearchResponse>("/search/multi", {
+    return this.http.get<MultiSearchResults>("/search/multi", {
       query: query.trim(),
       ...options,
     });

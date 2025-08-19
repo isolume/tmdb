@@ -3,13 +3,13 @@ import type {
   TvShow,
   TvCredits,
   TvImages,
-  GetTvOptions,
+  GetTvShowOptions,
   GetTvCreditsOptions,
   GetTvImagesOptions,
-  GetTvRecommendationsOptions,
-  TvRecommendationsResponse,
-  GetTvSimilarOptions,
-  TvSimilarResponse,
+  GetRecommendedTvShowsOptions,
+  RecommendedTvShows,
+  GetSimilarTvShowsOptions,
+  SimilarTvShows,
 } from "./types";
 
 /**
@@ -20,7 +20,7 @@ import type {
 export class TvService {
   constructor(private http: HttpClient) {}
 
-  getById(id: number, opts?: GetTvOptions): Promise<TvShow> {
+  getById(id: number, opts?: GetTvShowOptions): Promise<TvShow> {
     return this.http.get<TvShow>(`/tv/${id}`, opts);
   }
 
@@ -32,14 +32,11 @@ export class TvService {
     return this.http.get<TvImages>(`/tv/${id}/images`, opts);
   }
 
-  recommendations(
-    id: number,
-    opts?: GetTvRecommendationsOptions
-  ): Promise<TvRecommendationsResponse> {
-    return this.http.get<TvRecommendationsResponse>(`/tv/${id}/recommendations`, opts);
+  recommendations(id: number, opts?: GetRecommendedTvShowsOptions): Promise<RecommendedTvShows> {
+    return this.http.get<RecommendedTvShows>(`/tv/${id}/recommendations`, opts);
   }
 
-  similar(id: number, opts?: GetTvSimilarOptions): Promise<TvSimilarResponse> {
-    return this.http.get<TvSimilarResponse>(`/tv/${id}/similar`, opts);
+  similar(id: number, opts?: GetSimilarTvShowsOptions): Promise<SimilarTvShows> {
+    return this.http.get<SimilarTvShows>(`/tv/${id}/similar`, opts);
   }
 }

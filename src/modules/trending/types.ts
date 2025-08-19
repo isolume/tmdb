@@ -1,37 +1,42 @@
 import type { paths } from "../../generated/tmdb";
-import type { ResultItem, Paged } from "../../shared/common";
 
-type Prettify<T> = { [K in keyof T]: T[K] } & {};
-
-/* Full envelopes */
-export type TrendingAllResponse =
+export type TrendingAll =
   paths["/3/trending/all/{time_window}"]["get"]["responses"]["200"]["content"]["application/json"];
-export type TrendingMovieResponse =
+
+export type TrendingMovies =
   paths["/3/trending/movie/{time_window}"]["get"]["responses"]["200"]["content"]["application/json"];
-export type TrendingTvResponse =
+
+export type TrendingTvShows =
   paths["/3/trending/tv/{time_window}"]["get"]["responses"]["200"]["content"]["application/json"];
-export type TrendingPersonResponse =
+
+export type TrendingPeople =
   paths["/3/trending/person/{time_window}"]["get"]["responses"]["200"]["content"]["application/json"];
 
-/* Item types (make them discriminated) */
-export type TrendingMovieItem = ResultItem<TrendingMovieResponse> & { media_type: "movie" };
-export type TrendingTvItem = ResultItem<TrendingTvResponse> & { media_type: "tv" };
-export type TrendingPersonItem = ResultItem<TrendingPersonResponse> & { media_type: "person" };
+export type TrendingAllItem = NonNullable<TrendingAll["results"]>[number];
 
-/* Paged unions */
-export type TrendingItem = TrendingMovieItem | TrendingTvItem | TrendingPersonItem;
-export interface TrendingAll extends Paged<TrendingItem> {}
-export interface TrendingMovies extends Paged<TrendingMovieItem> {}
-export interface TrendingTv extends Paged<TrendingTvItem> {}
-export interface TrendingPeople extends Paged<TrendingPersonItem> {}
+export type TrendingMovie = NonNullable<TrendingMovies["results"]>[number] & {
+  media_type: "movie";
+};
 
-type _AllParams = paths["/3/trending/all/{time_window}"]["get"]["parameters"];
-type _MovieParams = paths["/3/trending/movie/{time_window}"]["get"]["parameters"];
-type _TvParams = paths["/3/trending/tv/{time_window}"]["get"]["parameters"];
-type _PersonParams = paths["/3/trending/person/{time_window}"]["get"]["parameters"];
+export type TrendingTvShow = NonNullable<TrendingTvShows["results"]>[number] & { media_type: "tv" };
 
-export type TrendingTimeWindow = _AllParams["path"]["time_window"];
-export type GetTrendingAllOptions = Prettify<_AllParams["query"]>;
-export type GetTrendingMovieOptions = Prettify<_MovieParams["query"]>;
-export type GetTrendingTvOptions = Prettify<_TvParams["query"]>;
-export type GetTrendingPersonOptions = Prettify<_PersonParams["query"]>;
+export type TrendingPerson = NonNullable<TrendingPeople["results"]>[number] & {
+  media_type: "person";
+};
+
+export type TrendingMedia = TrendingMovie | TrendingTvShow | TrendingPerson;
+
+export type TrendingTimeWindow =
+  paths["/3/trending/all/{time_window}"]["get"]["parameters"]["path"]["time_window"]; // "day" | "week"
+
+export type GetTrendingAllOptions =
+  paths["/3/trending/all/{time_window}"]["get"]["parameters"]["query"];
+
+export type GetTrendingMovieOptions =
+  paths["/3/trending/movie/{time_window}"]["get"]["parameters"]["query"];
+
+export type GetTrendingTvOptions =
+  paths["/3/trending/tv/{time_window}"]["get"]["parameters"]["query"];
+
+export type GetTrendingPersonOptions =
+  paths["/3/trending/person/{time_window}"]["get"]["parameters"]["query"];

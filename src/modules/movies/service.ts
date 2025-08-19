@@ -6,10 +6,10 @@ import type {
   GetMovieOptions,
   GetMovieCreditsOptions,
   GetMovieImagesOptions,
-  GetMovieRecommendationsOptions,
-  GetMovieSimilarOptions,
-  MovieRecommendationsResponse,
-  MovieSimilarResponse,
+  GetRecommendedMoviesOptions,
+  GetSimilarMoviesOptions,
+  RecommendedMovies,
+  SimilarMovies,
 } from "./types";
 
 /**
@@ -37,15 +37,15 @@ export class MoviesService {
 
   async recommendations(
     id: number,
-    options?: GetMovieRecommendationsOptions
-  ): Promise<MovieRecommendationsResponse> {
+    options?: GetRecommendedMoviesOptions
+  ): Promise<RecommendedMovies> {
     this.validateId(id);
-    return this.http.get<MovieRecommendationsResponse>(`/movie/${id}/recommendations`, options);
+    return this.http.get<RecommendedMovies>(`/movie/${id}/recommendations`, options);
   }
 
-  async similar(id: number, options?: GetMovieSimilarOptions): Promise<MovieSimilarResponse> {
+  async similar(id: number, options?: GetSimilarMoviesOptions): Promise<SimilarMovies> {
     this.validateId(id);
-    return this.http.get<MovieSimilarResponse>(`/movie/${id}/similar`, options);
+    return this.http.get<SimilarMovies>(`/movie/${id}/similar`, options);
   }
 
   /** Basic positive-integer guard for IDs. */
