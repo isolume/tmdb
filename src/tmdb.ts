@@ -1,5 +1,5 @@
-import { HttpClient } from "./core/http";
-import { TMDBError } from "./core/errors";
+import { HttpClient } from "./core";
+import { TMDBError } from "./core";
 
 import { MoviesService } from "./modules/movies/service";
 import { TvService } from "./modules/tv/service";

@@ -2,26 +2,24 @@ import type { TMDBOptions } from "../shared/common";
 import { TMDBError, type TMDBErrorBody } from "./errors";
 
 const DEFAULT_BASE_URL = "https://api.themoviedb.org/3";
-const REQUEST_TIMEOUT = 10000; // 10 seconds
 
 /**
  * Internal HTTP client for TMDB API requests.
  * Handles authentication, error responses, and request formatting.
  *
+ * @internal
  */
 export class HttpClient {
   private readonly baseUrl: string;
   private readonly apiKey?: string;
   private readonly language?: string;
   private readonly region?: string;
-  private readonly timeout: number;
 
   constructor(options: TMDBOptions) {
     this.baseUrl = options.baseUrl ?? DEFAULT_BASE_URL;
     this.apiKey = options.apiKey;
     this.language = options.language;
     this.region = options.region;
-    this.timeout = options.timeout ?? REQUEST_TIMEOUT;
   }
 
   /**
@@ -37,7 +35,13 @@ export class HttpClient {
     const url = this.baseUrl + path + this.buildQueryString(queryParams);
 
     try {
-      const response = await this.fetchWithTimeout(url);
+      const response = await fetch(url,{
+        method:'GET',
+        headers:{
+          Accept: "application/json",
+          "User-Agent": "tmdb-client/0.2.0"
+        }
+      })
 
       if (!response.ok) {
         await this.handleErrorResponse(response);
@@ -94,34 +98,6 @@ export class HttpClient {
 
     const queryString = searchParams.toString();
     return queryString ? `?${queryString}` : "";
-  }
-
-  /**
-   * Fetch with timeout support using AbortController.
-   */
-  private async fetchWithTimeout(url: string): Promise<Response> {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
-
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "User-Agent": "tmdb-client/1.0.0",
-        },
-        signal: controller.signal,
-      });
-
-      return response;
-    } catch (error) {
-      if (error instanceof Error && error.name === "AbortError") {
-        throw new TMDBError(`Request timeout after ${this.timeout}ms`, { status: 0 });
-      }
-      throw error;
-    } finally {
-      clearTimeout(timeoutId);
-    }
   }
 
   /**
