@@ -7,7 +7,7 @@ const KEY = process.env.TMDB_API_KEY;
   const tmdb = new TMDB({ apiKey: KEY!, language: "en-US" });
 
   it("fetches real TV series data", async () => {
-    const series = await tmdb.tv.getById(1399); // Game of Thrones
+    const series = await tmdb.tv.get(1399); // Game of Thrones
     expect(series.id).toBe(1399);
     expect(typeof series.name).toBe("string");
   });

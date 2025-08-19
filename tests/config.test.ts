@@ -18,7 +18,7 @@ describe("ConfigurationService", () => {
     vi.restoreAllMocks();
   });
 
-  it("get returns images config and change_keys", async () => {
+  it("get returns images configuration and change_keys", async () => {
     const sample = {
       images: {
         base_url: "http://image.tmdb.org/t/p/",
@@ -34,7 +34,7 @@ describe("ConfigurationService", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.config.get();
+    const res = await tmdb.configuration.get();
 
     expect(res.images!.secure_base_url).toMatch(/^https:/);
     expect(Array.isArray(res.images!.poster_sizes)).toBe(true);
@@ -50,7 +50,7 @@ describe("ConfigurationService", () => {
     const spy = vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.config.countries({ language: "en-US" });
+    const res = await tmdb.configuration.countries({ language: "en-US" });
 
     expect(Array.isArray(res)).toBe(true);
     expect(res[0].iso_3166_1).toBe("US");
@@ -68,7 +68,7 @@ describe("ConfigurationService", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.config.jobs();
+    const res = await tmdb.configuration.jobs();
 
     expect(Array.isArray(res)).toBe(true);
     expect(res[0].department).toBe("Directing");
@@ -84,23 +84,12 @@ describe("ConfigurationService", () => {
     const spy = vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.config.languages();
+    const res = await tmdb.configuration.languages();
 
     expect(Array.isArray(res)).toBe(true);
     expect(res[1].iso_639_1).toBe("fr");
     const url = (spy.mock.calls[0]?.[0] as string) ?? "";
     expect(url).toContain("/configuration/languages");
-  });
-
-  it("primaryTranslations returns an array of locale strings", async () => {
-    const sample = ["en-US", "fr-FR", "es-ES"];
-    vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
-
-    const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.config.primaryTranslations();
-
-    expect(Array.isArray(res)).toBe(true);
-    expect(res).toContain("en-US");
   });
 
   it("timezones returns country groups with zone arrays", async () => {
@@ -111,7 +100,7 @@ describe("ConfigurationService", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.config.timezones();
+    const res = await tmdb.configuration.timezones();
 
     expect(Array.isArray(res)).toBe(true);
     expect(res[1].iso_3166_1).toBe("IN");

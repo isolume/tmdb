@@ -35,13 +35,13 @@ export class HttpClient {
     const url = this.baseUrl + path + this.buildQueryString(queryParams);
 
     try {
-      const response = await fetch(url,{
-        method:'GET',
-        headers:{
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
           Accept: "application/json",
-          "User-Agent": "tmdb-client/0.2.0"
-        }
-      })
+          "User-Agent": "tmdb-client/0.2.0",
+        },
+      });
 
       if (!response.ok) {
         await this.handleErrorResponse(response);
@@ -117,7 +117,9 @@ export class HttpClient {
           message = errorBody.status_message;
         }
       }
-    } catch {}
+    } catch {
+      /* ignore JSON parse errors */
+    }
 
     if (response.status === 401) {
       message = "Invalid API key. Please check your TMDB credentials.";

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { HttpClient } from "../src/core";
-import type { TMDBOptions } from "../src/core";
+import type { TMDBOptions } from "../src";
 
 function jsonResponse(data: unknown, init?: ResponseInit) {
   return new Response(JSON.stringify(data), {
