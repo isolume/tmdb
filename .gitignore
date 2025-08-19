@@ -35,3 +35,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Build output
 /dist
+
+/src/generated/*
+!/src/generated/README.md
