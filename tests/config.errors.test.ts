@@ -69,7 +69,7 @@ describe("ConfigurationService (error cases)", () => {
 
     const tmdb = new TMDB({ apiKey: "ABC" });
 
-    await expect(tmdb.configuration.jobs()).rejects.toBeInstanceOf(TypeError);
+    await expect(tmdb.configuration.jobs()).rejects.toBeInstanceOf(TMDBError);
     await expect(tmdb.configuration.jobs()).rejects.toThrow("Network failure");
   });
 
