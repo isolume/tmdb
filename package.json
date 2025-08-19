@@ -20,7 +20,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
     }
   },
   "files": [
@@ -32,33 +33,58 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "codegen": "tsx openapi/codegen.ts",
+    "codegen:local": "openapi-typescript openapi/tmdb.v3.yaml -o src/generated/tmdb.ts --output-esm || openapi-typescript openapi/tmdb.v3.json -o src/generated/tmdb.ts --output-esm",
+    "codegen:url": "openapi-typescript https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/themoviedb.org/3/openapi.yaml -o src/generated/tmdb.ts --output-esm",
+    "build": "pnpm codegen && tsup",
+    "build:types": "tsc --emitDeclarationOnly",
+    "dev": "pnpm codegen && tsup --watch",
     "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run tests/**/*.int.test.ts",
+    "test:unit": "vitest run tests/**/*.service.test.ts tests/**/*.test.ts --exclude tests/**/*.int.test.ts",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier -w .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "typecheck:examples": "tsc --noEmit examples/*.ts",
     "example": "tsx examples/quickstart.ts",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run lint && npm run build && npm test"
+    "example:movie": "tsx examples/movie.example.ts",
+    "example:search": "tsx examples/search.example.ts",
+    "example:trending": "tsx examples/trending.example.ts",
+    "example:tv": "tsx examples/tv.example.ts",
+    "example:config": "tsx examples/config.example.ts",
+    "example:errors": "tsx examples/error-handling.example.ts",
+    "clean": "rm -rf dist coverage",
+    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm codegen && pnpm build && pnpm test"
   },
   "keywords": [
     "tmdb",
     "themoviedb",
     "movies",
     "tv",
+    "television",
     "api",
     "sdk",
-    "typescript"
+    "client",
+    "typescript",
+    "javascript",
+    "rest-api",
+    "openapi"
   ],
   "devDependencies": {
     "@eslint/js": "^9.33.0",
     "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
+    "@vitest/coverage-v8": "^2.0.0",
     "eslint": "^9.33.0",
     "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-vitest": "^0.5.4",
     "globals": "^16.3.0",
+    "openapi-typescript": "^7.9.1",
     "prettier": "^3.3.3",
     "tsup": "^8.1.0",
     "tsx": "^4.16.0",

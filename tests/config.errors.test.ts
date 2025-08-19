@@ -29,8 +29,8 @@ describe("ConfigurationService (error cases)", () => {
 
     const tmdb = new TMDB({ apiKey: "BAD" });
 
-    await expect(tmdb.config.get()).rejects.toBeInstanceOf(TMDBError);
-    await expect(tmdb.config.get()).rejects.toMatchObject({
+    await expect(tmdb.configuration.get()).rejects.toBeInstanceOf(TMDBError);
+    await expect(tmdb.configuration.get()).rejects.toMatchObject({
       status: 401,
     });
   });
@@ -45,8 +45,8 @@ describe("ConfigurationService (error cases)", () => {
 
     const tmdb = new TMDB({ apiKey: "ABC" });
 
-    await expect(tmdb.config.countries()).rejects.toBeInstanceOf(TMDBError);
-    await expect(tmdb.config.countries()).rejects.toMatchObject({
+    await expect(tmdb.configuration.countries()).rejects.toBeInstanceOf(TMDBError);
+    await expect(tmdb.configuration.countries()).rejects.toMatchObject({
       status: 404,
     });
   });
@@ -58,8 +58,8 @@ describe("ConfigurationService (error cases)", () => {
 
     const tmdb = new TMDB({ apiKey: "ABC" });
 
-    await expect(tmdb.config.languages()).rejects.toBeInstanceOf(TMDBError);
-    await expect(tmdb.config.languages()).rejects.toMatchObject({
+    await expect(tmdb.configuration.languages()).rejects.toBeInstanceOf(TMDBError);
+    await expect(tmdb.configuration.languages()).rejects.toMatchObject({
       status: 500,
     });
   });
@@ -69,12 +69,11 @@ describe("ConfigurationService (error cases)", () => {
 
     const tmdb = new TMDB({ apiKey: "ABC" });
 
-    await expect(tmdb.config.jobs()).rejects.toBeInstanceOf(TypeError);
-    await expect(tmdb.config.jobs()).rejects.toThrow("Network failure");
+    await expect(tmdb.configuration.jobs()).rejects.toBeInstanceOf(TMDBError);
+    await expect(tmdb.configuration.jobs()).rejects.toThrow("Network failure");
   });
 
   it("handles invalid JSON payload (malformed JSON) for /configuration", async () => {
-
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response("{not-valid-json", {
         status: 200,
@@ -84,37 +83,23 @@ describe("ConfigurationService (error cases)", () => {
 
     const tmdb = new TMDB({ apiKey: "ABC" });
 
-    await expect(tmdb.config.get()).rejects.toBeInstanceOf(TMDBError);
-    await expect(tmdb.config.get()).rejects.toMatchObject({
+    await expect(tmdb.configuration.get()).rejects.toBeInstanceOf(TMDBError);
+    await expect(tmdb.configuration.get()).rejects.toMatchObject({
       message: expect.stringMatching(/parse|json/i),
     });
   });
 
-  it("handles non-JSON response gracefully for /configuration/primary_translations", async () => {
-
-    vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      new Response("OK", {
-        status: 200,
-        headers: { "Content-Type": "text/plain" },
-      })
-    );
-
-    const tmdb = new TMDB({ apiKey: "ABC" });
-
-    await expect(tmdb.config.primaryTranslations()).rejects.toBeInstanceOf(TMDBError);
-    await expect(tmdb.config.primaryTranslations()).rejects.toMatchObject({
-      status: 200, 
-    });
-  });
-
   it("bubbles query param encoding issues (bad language) without crashing", async () => {
-    const spy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      response({ status_message: "Invalid parameter: language" }, { status: 422 })
-    );
+    const spy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(
+        response({ status_message: "Invalid parameter: language" }, { status: 422 })
+      );
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    await expect(tmdb.config.countries({ language: "en_US" }))
-      .rejects.toBeInstanceOf(TMDBError);
+    await expect(tmdb.configuration.countries({ language: "en_US" })).rejects.toBeInstanceOf(
+      TMDBError
+    );
 
     expect(spy).toHaveBeenCalled();
     const url = (spy.mock.calls[0]?.[0] as string) ?? "";

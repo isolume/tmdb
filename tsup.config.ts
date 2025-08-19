@@ -7,9 +7,8 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   treeshake: true,
+  splitting: true,
   minify: false,
   target: "es2021",
-  banner: {
-    js: "#!/usr/bin/env node"
-  }
+  external: ["node:*"],
 });

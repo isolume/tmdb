@@ -35,11 +35,11 @@ describe("SearchService (unit)", () => {
     const spy = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.search.movie("inception", { page: 1, include_adult: false });
+    const res = await tmdb.search.movies("inception", { page: 1, include_adult: false });
 
     expect(res.page).toBe(1);
     expect(Array.isArray(res.results)).toBe(true);
-    expect(res.results[0].title).toBe("Inception");
+    expect(res.results && res.results.length > 0 && res.results[0].title).toBe("Inception");
 
     const calledUrl = new URL(spy.mock.calls[0][0] as string);
     expect(calledUrl.pathname).toMatch(/\/search\/movie$/);
@@ -69,7 +69,7 @@ describe("SearchService (unit)", () => {
     const tmdb = new TMDB({ apiKey: "ABC" });
     const res = await tmdb.search.tv("game of thrones", { first_air_date_year: 2011 });
 
-    expect(res.results[0].name).toBe("Game of Thrones");
+    expect(res.results && res.results.length > 0 && res.results[0].name).toBe("Game of Thrones");
   });
 
   it("searchPeople returns paged person results", async () => {
@@ -92,7 +92,7 @@ describe("SearchService (unit)", () => {
     const tmdb = new TMDB({ apiKey: "ABC" });
     const res = await tmdb.search.people("brad pitt");
 
-    expect(res.results[0].name).toBe("Brad Pitt");
+    expect(res.results && res.results.length > 0 && res.results[0].name).toBe("Brad Pitt");
   });
 
   it("searchMulti returns mixed results", async () => {
@@ -111,8 +111,8 @@ describe("SearchService (unit)", () => {
     const tmdb = new TMDB({ apiKey: "ABC" });
     const res = await tmdb.search.multi("a");
 
-    expect(res.results.length).toBe(3);
-    const types = res.results.map((r: MultiSearchResult) => r.media_type);
+    expect(res.results && res.results.length).toBe(3);
+    const types = res.results ? res.results.map((r: MultiSearchResult) => r.media_type) : [];
     expect(types).toContain("movie");
     expect(types).toContain("tv");
     expect(types).toContain("person");
@@ -123,7 +123,7 @@ describe("SearchService (unit)", () => {
     const spy = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    await tmdb.search.movie("spider man: home-coming");
+    await tmdb.search.movies("spider man: home-coming");
 
     const calledUrl = new URL(spy.mock.calls[0][0] as string);
     expect(calledUrl.searchParams.get("query")).toBe("spider man: home-coming");
@@ -134,6 +134,6 @@ describe("SearchService (unit)", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(errorResponse);
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    await expect(tmdb.search.movie("bad")).rejects.toThrow(); // your HttpClient should throw on !ok
+    await expect(tmdb.search.movies("bad")).rejects.toThrow(); // your HttpClient should throw on !ok
   });
 });

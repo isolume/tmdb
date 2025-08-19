@@ -11,7 +11,7 @@ describe("MovieService", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const m = await tmdb.movie.getById(27205);
+    const m = await tmdb.movies.get(27205);
 
     expect(m.id).toBe(27205);
     expect(m.title).toBe("Inception");
@@ -22,7 +22,7 @@ describe("MovieService", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.movie.recommendations(27205, { page: 1 });
+    const res = await tmdb.movies.recommendations(27205, { page: 1 });
 
     expect(res.page).toBe(1);
     expect(Array.isArray(res.results)).toBe(true);

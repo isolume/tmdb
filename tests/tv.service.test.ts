@@ -20,7 +20,7 @@ describe("TvService", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const series = await tmdb.tv.getById(1399);
+    const series = await tmdb.tv.get(1399);
 
     expect(series.id).toBe(1399);
     expect(series.name).toBe("Game of Thrones");
