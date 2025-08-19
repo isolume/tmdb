@@ -1,4 +1,4 @@
-import type { HttpClient } from "../client";
+import type { HttpClient } from "../../core";
 import type {
   SearchMovieResponse,
   SearchTvResponse,
@@ -8,7 +8,7 @@ import type {
   TvSearchOptions,
   PersonSearchOptions,
   MultiSearchOptions,
-} from "../types/search";
+} from "./types";
 
 /**
  * Internal service for TMDB search endpoints.

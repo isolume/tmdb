@@ -1,5 +1,5 @@
-import type { TMDBOptions } from "./types";
-import { TMDBError, type TMDBErrorBody } from "./error";
+import type { TMDBOptions } from "../shared/common";
+import { TMDBError, type TMDBErrorBody } from "./errors";
 
 const DEFAULT_BASE_URL = "https://api.themoviedb.org/3";
 const REQUEST_TIMEOUT = 10000; // 10 seconds
@@ -7,7 +7,7 @@ const REQUEST_TIMEOUT = 10000; // 10 seconds
 /**
  * Internal HTTP client for TMDB API requests.
  * Handles authentication, error responses, and request formatting.
- * 
+ *
  */
 export class HttpClient {
   private readonly baseUrl: string;
@@ -108,7 +108,7 @@ export class HttpClient {
         method: "GET",
         headers: {
           Accept: "application/json",
-          "User-Agent": "tmdb-client/1.0.0", 
+          "User-Agent": "tmdb-client/1.0.0",
         },
         signal: controller.signal,
       });
@@ -141,8 +141,7 @@ export class HttpClient {
           message = errorBody.status_message;
         }
       }
-    } catch {
-    }
+    } catch {}
 
     if (response.status === 401) {
       message = "Invalid API key. Please check your TMDB credentials.";
@@ -178,4 +177,3 @@ export class HttpClient {
     }
   }
 }
-

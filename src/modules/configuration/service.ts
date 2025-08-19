@@ -1,40 +1,39 @@
-import type { HttpClient } from "../client";
+import type { HttpClient } from "../../core";
 import type {
   TMDBConfiguration,
   Country,
   JobGroup,
   Language,
   TimezoneGroup,
-  PrimaryTranslationsResponse,
-  GetConfigurationQuery,
-  GetCountriesQuery,
-  GetLanguagesQuery,
-} from "../types";
+  GetConfigurationOptions,
+  GetCountriesOptions,
+} from "./types";
 
+/**
+ * Internal service for TMDB configuration endpoints.
+ * Not exposed to users — use the TMDB factory instead.
+ * @internal
+ */
 export class ConfigurationService {
   constructor(private http: HttpClient) {}
 
-  get(opts?: GetConfigurationQuery) {
+  async getConfig(opts?: GetConfigurationOptions): Promise<TMDBConfiguration> {
     return this.http.get<TMDBConfiguration>("/configuration", opts);
   }
 
-  countries(opts?: GetCountriesQuery) {
+  async countries(opts?: GetCountriesOptions): Promise<Country[]> {
     return this.http.get<Country[]>("/configuration/countries", opts);
   }
 
-  jobs() {
+  async jobs(): Promise<JobGroup[]> {
     return this.http.get<JobGroup[]>("/configuration/jobs");
   }
 
-  languages() {
+  async languages(): Promise<Language[]> {
     return this.http.get<Language[]>("/configuration/languages");
   }
 
-  primaryTranslations() {
-    return this.http.get<PrimaryTranslationsResponse>("/configuration/primary_translations");
-  }
-
-  timezones() {
+  async timezones(): Promise<TimezoneGroup[]> {
     return this.http.get<TimezoneGroup[]>("/configuration/timezones");
   }
 }

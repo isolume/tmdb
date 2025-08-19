@@ -1,17 +1,21 @@
-import type { paths } from "./tmdb";
-import type { ResultItem, Paged } from "./common";
+import type { paths } from "../../generated/tmdb";
+import type { ResultItem, Paged } from "../../shared/common";
 
 type Prettify<T> = { [K in keyof T]: T[K] } & {};
 
 // Raw OpenAPI response types (internal)
 /** @internal */
-type _MovieSearchResponse = paths["/3/search/movie"]["get"]["responses"]["200"]["content"]["application/json"];
+type _MovieSearchResponse =
+  paths["/3/search/movie"]["get"]["responses"]["200"]["content"]["application/json"];
 /** @internal */
-type _TvSearchResponse = paths["/3/search/tv"]["get"]["responses"]["200"]["content"]["application/json"];
+type _TvSearchResponse =
+  paths["/3/search/tv"]["get"]["responses"]["200"]["content"]["application/json"];
 /** @internal */
-type _PersonSearchResponse = paths["/3/search/person"]["get"]["responses"]["200"]["content"]["application/json"];
+type _PersonSearchResponse =
+  paths["/3/search/person"]["get"]["responses"]["200"]["content"]["application/json"];
 /** @internal */
-type _MultiSearchResponse = paths["/3/search/multi"]["get"]["responses"]["200"]["content"]["application/json"];
+type _MultiSearchResponse =
+  paths["/3/search/multi"]["get"]["responses"]["200"]["content"]["application/json"];
 
 // OpenAPI query parameter types (canonical source of truth)
 /** Complete query parameters for movie search endpoint. */
