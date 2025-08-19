@@ -1,15 +1,12 @@
-// src/tmdb.ts
 import { HttpClient } from "./core/http";
 import { TMDBError } from "./core/errors";
 
-// Services (internal)
 import { MoviesService } from "./modules/movies/service";
 import { TvService } from "./modules/tv/service";
 import { SearchService } from "./modules/search/service";
 import { TrendingService } from "./modules/trending/service";
 import { ConfigurationService } from "./modules/configuration/service";
 
-// Public types (curated) – import from module/shared type barrels
 import type {
   GetMovieOptions,
   GetMovieCreditsOptions,
