@@ -20,7 +20,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
     }
   },
   "files": [
@@ -32,31 +33,44 @@
     "node": ">=18"
   },
   "scripts": {
-    "types:tmdb": "openapi-typescript specs/tmdb.v3.json -o src/types/tmdb.ts --output-esm",
-    "types:tmdb:url": "openapi-typescript https://developer.themoviedb.org/openapi/64542913e1f86100738e227f -o src/types/tmdb.ts --output-esm",
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "codegen": "tsx openapi/codegen.ts",
+    "codegen:local": "openapi-typescript openapi/tmdb.v3.yaml -o src/generated/tmdb.ts --output-esm || openapi-typescript openapi/tmdb.v3.json -o src/generated/tmdb.ts --output-esm",
+    "codegen:url": "openapi-typescript https://raw.githubusercontent.com/APIs-guru/openapi-directory/main/APIs/themoviedb.org/3/openapi.yaml -o src/generated/tmdb.ts --output-esm",
+    "build": "pnpm codegen && tsup",
+    "build:types": "tsc --emitDeclarationOnly",
+    "dev": "pnpm codegen && tsup --watch",
     "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier -w .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
     "example": "tsx examples/quickstart.ts",
-    "prepare": "npm run types:tmdb && npm run build",
-    "prepublishOnly": "npm run lint && npm run types:tmdb && npm run build && npm test"
+    "clean": "rm -rf dist coverage",
+    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm codegen && pnpm build && pnpm test"
   },
   "keywords": [
     "tmdb",
     "themoviedb",
     "movies",
     "tv",
+    "television",
     "api",
     "sdk",
-    "typescript"
+    "client",
+    "typescript",
+    "javascript",
+    "rest-api",
+    "openapi"
   ],
   "devDependencies": {
     "@eslint/js": "^9.33.0",
     "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
+    "@vitest/coverage-v8": "^2.0.0",
     "eslint": "^9.33.0",
     "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-vitest": "^0.5.4",

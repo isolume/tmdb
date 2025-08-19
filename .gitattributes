@@ -1,0 +1,6 @@
+
+# Mark generated files
+src/generated/* linguist-generated=true
+
+# Ignore build output for GitHub stats
+dist/* linguist-generated=true
