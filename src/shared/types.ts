@@ -2,9 +2,6 @@ type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}`
   ? `${T}${Capitalize<SnakeToCamelCase<U>>}`
   : S;
 
-/**
- * @internal
- */
 export type CamelCase<T> =
   T extends ReadonlyArray<infer E>
     ? Array<CamelCase<E>>
