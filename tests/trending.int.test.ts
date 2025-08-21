@@ -13,7 +13,7 @@ const KEY = process.env.TMDB_API_KEY;
     // At least one item should exist typically
     if (res.results && res.results.length > 0) {
       const item = res.results[0];
-      expect(["movie", "tv", "person"]).toContain(item.media_type);
+      expect(["movie", "tv", "person"]).toContain(item.mediaType);
     }
   });
 

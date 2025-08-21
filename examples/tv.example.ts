@@ -14,18 +14,18 @@ async function main() {
     language: "en-US",
   });
 
-  console.log(`📺 [TV Show] "${tvShow.name}" (${tvShow.first_air_date})`);
+  console.log(`📺 [TV Show] "${tvShow.name}" (${tvShow.firstAirDate})`);
   console.log(`   Status: ${tvShow.status}`);
-  console.log(`   Seasons: ${tvShow.number_of_seasons}, Episodes: ${tvShow.number_of_episodes}`);
-  console.log(`   Rating: ⭐ ${tvShow.vote_average}/10 (${tvShow.vote_count} votes)`);
+  console.log(`   Seasons: ${tvShow.numberOfSeasons}, Episodes: ${tvShow.numberOfEpisodes}`);
+  console.log(`   Rating: ⭐ ${tvShow.voteAverage}/10 (${tvShow.voteCount} votes)`);
   console.log(`   Genres: ${tvShow.genres?.map((g) => g.name).join(", ") ?? "None"}`);
   console.log(`   Networks: ${tvShow.networks?.map((n) => n.name).join(", ") ?? "None"}`);
 
   // Show episode information if available
-  if (tvShow.last_episode_to_air) {
-    const lastEp = tvShow.last_episode_to_air;
+  if (tvShow.lastEpisodeToAir) {
+    const lastEp = tvShow.lastEpisodeToAir;
     console.log(
-      `   Last Episode: S${lastEp.season_number}E${lastEp.episode_number} "${lastEp.name}" (${lastEp.air_date})`
+      `   Last Episode: S${lastEp.seasonNumber}E${lastEp.episodeNumber} "${lastEp.name}" (${lastEp.airDate})`
     );
   }
 
@@ -47,7 +47,7 @@ async function main() {
     });
 
   // Images and related content
-  const images: TvImages = await tmdb.tv.images(seriesId, { include_image_language: "en,null" });
+  const images: TvImages = await tmdb.tv.images(seriesId, { includeImageLanguage: "en,null" });
   console.log(
     `\n📸 [Images] Posters: ${images.posters?.length ?? 0}, Backdrops: ${images.backdrops?.length ?? 0}`
   );
@@ -56,14 +56,14 @@ async function main() {
   const recommendations = await tmdb.tv.recommendations(seriesId, { page: 1 });
   const similarShows = await tmdb.tv.similar(seriesId, { page: 1 });
   console.log(`\n🔗 [Related Content]`);
-  console.log(`   Recommendations: ${recommendations.total_results}`);
-  console.log(`   Similar shows: ${similarShows.total_results}`);
+  console.log(`   Recommendations: ${recommendations.totalResults}`);
+  console.log(`   Similar shows: ${similarShows.totalResults}`);
 
   // Show top recommendation
   const topRec = recommendations.results?.[0];
   if (topRec) {
     console.log(
-      `   Top recommendation: "${topRec.name}" (${topRec.first_air_date}) ⭐ ${topRec.vote_average}`
+      `   Top recommendation: "${topRec.name}" (${topRec.firstAirDate}) ⭐ ${topRec.voteAverage}`
     );
   }
 }

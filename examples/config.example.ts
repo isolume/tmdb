@@ -16,15 +16,15 @@ async function main() {
 
   // Type-safe image configuration
   if (config.images) {
-    const { secure_base_url, poster_sizes, backdrop_sizes } = config.images;
+    const { secureBaseUrl, posterSizes, backdropSizes } = config.images;
     console.log(`\n📸 Image Configuration:`);
-    console.log(`  Base URL: ${secure_base_url}`);
-    console.log(`  Poster sizes: ${poster_sizes?.join(", ") ?? "None"}`);
-    console.log(`  Backdrop sizes: ${backdrop_sizes?.join(", ") ?? "None"}`);
+    console.log(`  Base URL: ${secureBaseUrl}`);
+    console.log(`  Poster sizes: ${posterSizes?.join(", ") ?? "None"}`);
+    console.log(`  Backdrop sizes: ${backdropSizes?.join(", ") ?? "None"}`);
 
     // Helper function with type safety
     const buildImageUrl = (path: string, size: string = "w500"): string => {
-      return `${secure_base_url}${size}${path}`;
+      return `${secureBaseUrl}${size}${path}`;
     };
 
     // Example usage
@@ -37,7 +37,7 @@ async function main() {
   console.log(`\n🌍 Available countries: ${countries.length}`);
   countries.slice(0, 5).forEach((country) => {
     // TypeScript knows Country has iso_3166_1 and english_name
-    console.log(`  ${country.iso_3166_1}: ${country.english_name}`);
+    console.log(`  ${country.iso31661}: ${country.englishName}`);
   });
 
   // Get available languages with typing
@@ -45,11 +45,11 @@ async function main() {
   console.log(`\n🗣️ Available languages: ${languages.length}`);
   languages
     .filter(
-      (lang) => lang.english_name?.includes("English") || lang.english_name?.includes("Spanish")
+      (lang) => lang.englishName?.includes("English") || lang.englishName?.includes("Spanish")
     )
     .forEach((language) => {
       // TypeScript knows Language structure
-      console.log(`  ${language.iso_639_1}: ${language.english_name} (${language.name})`);
+      console.log(`  ${language.iso6391}: ${language.englishName} (${language.name})`);
     });
 }
 

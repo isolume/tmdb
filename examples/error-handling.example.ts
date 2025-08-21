@@ -55,9 +55,9 @@ async function main() {
     // This might cause validation errors
     const searchResult = await tmdb.search.movies("", {
       page: -1, // Invalid page number
-      include_adult: false,
+      includeAdult: false,
     });
-    console.log(`   ✅ Search succeeded: ${searchResult.total_results} results`);
+    console.log(`   ✅ Search succeeded: ${searchResult.totalResults} results`);
   } catch (error) {
     if (error instanceof TMDBError) {
       console.log(`   ❌ Search failed: ${error.message}`);
@@ -77,7 +77,7 @@ async function main() {
   for (const id of movieIds) {
     try {
       const movie = await tmdb.movies.get(id);
-      console.log(`   ✅ ${movie.title} (${movie.release_date})`);
+      console.log(`   ✅ ${movie.title} (${movie.releaseDate})`);
     } catch (error) {
       if (error instanceof TMDBError && error.status === 404) {
         console.log(`   ⚠️ Movie ID ${id} not found - skipping`);

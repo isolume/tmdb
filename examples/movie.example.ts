@@ -12,7 +12,7 @@ async function main() {
     language: "en-US",
   });
 
-  console.log(`[Movie] ${movie.title} (${movie.release_date}) - Rating: ${movie.vote_average}/10`);
+  console.log(`[Movie] ${movie.title} (${movie.releaseDate}) - Rating: ${movie.voteAverage}/10`);
   console.log(`Budget: $${movie.budget?.toLocaleString() ?? "Unknown"}`);
   console.log(`Revenue: $${movie.revenue?.toLocaleString() ?? "Unknown"}`);
   console.log(`Genres: ${movie.genres?.map((g) => g.name).join(", ") ?? "None"}`);
@@ -27,7 +27,7 @@ async function main() {
 
   // Images with type-safe access
   const images: MovieImages = await tmdb.movies.images(movie.id, {
-    include_image_language: "en,null",
+    includeImageLanguage: "en,null",
   });
   console.log(
     `\n[Images] Posters: ${images.posters?.length ?? 0}, Backdrops: ${images.backdrops?.length ?? 0}`
@@ -36,12 +36,12 @@ async function main() {
   // Recommendations & Similar with proper typing
   const recs = await tmdb.movies.recommendations(movie.id, { page: 1 });
   const sims = await tmdb.movies.similar(movie.id, { page: 1 });
-  console.log(`\n[Related] Recommendations: ${recs.total_results}, Similar: ${sims.total_results}`);
+  console.log(`\n[Related] Recommendations: ${recs.totalResults}, Similar: ${sims.totalResults}`);
 
   // Show first recommendation with full type safety
   const firstRec = recs.results?.[0];
   if (firstRec) {
-    console.log(`Top recommendation: "${firstRec.title}" (${firstRec.release_date})`);
+    console.log(`Top recommendation: "${firstRec.title}" (${firstRec.releaseDate})`);
   }
 }
 
