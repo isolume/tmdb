@@ -5,7 +5,6 @@ import type {
   JobGroup,
   Language,
   TimezoneGroup,
-  GetConfigurationOptions,
   GetCountriesOptions,
 } from "./types";
 
@@ -17,8 +16,8 @@ import type {
 export class ConfigurationService {
   constructor(private http: HttpClient) {}
 
-  async getConfig(opts?: GetConfigurationOptions): Promise<TMDBConfiguration> {
-    return this.http.get<TMDBConfiguration>("/configuration", opts);
+  async getConfig(): Promise<TMDBConfiguration> {
+    return this.http.get<TMDBConfiguration>("/configuration");
   }
 
   async countries(opts?: GetCountriesOptions): Promise<Country[]> {

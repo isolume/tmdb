@@ -1,32 +1,44 @@
 import type { paths } from "../../generated/tmdb";
+import type { CamelCase } from "../../shared/types";
 
-export type TvShow =
+type TvShowApiResponse =
   paths["/3/tv/{series_id}"]["get"]["responses"]["200"]["content"]["application/json"];
+export type TvShow = CamelCase<TvShowApiResponse>;
 
-export type EpisodeSummary = NonNullable<TvShow["last_episode_to_air"]>;
+export type EpisodeSummary = NonNullable<TvShow["lastEpisodeToAir"]>;
 
-export type TvCredits =
+type TvCreditsApiResponse =
   paths["/3/tv/{series_id}/credits"]["get"]["responses"]["200"]["content"]["application/json"];
+export type TvCredits = CamelCase<TvCreditsApiResponse>;
 
-export type TvImages =
+type TvImagesApiResponse =
   paths["/3/tv/{series_id}/images"]["get"]["responses"]["200"]["content"]["application/json"];
+export type TvImages = CamelCase<TvImagesApiResponse>;
 
-export type SimilarTvShows =
+type SimilarTvShowsApiResponse =
   paths["/3/tv/{series_id}/similar"]["get"]["responses"]["200"]["content"]["application/json"];
+export type SimilarTvShows = CamelCase<SimilarTvShowsApiResponse>;
 
 export type RecommendedTvShows = SimilarTvShows;
 
 export type SimilarTvShow = NonNullable<SimilarTvShows["results"]>[number];
 export type RecommendedTvShow = NonNullable<RecommendedTvShows["results"]>[number];
 
-export type GetTvShowOptions = paths["/3/tv/{series_id}"]["get"]["parameters"]["query"];
+type GetTvShowOptionsApiResponse = paths["/3/tv/{series_id}"]["get"]["parameters"]["query"];
+export type GetTvShowOptions = CamelCase<GetTvShowOptionsApiResponse>;
 
-export type GetTvCreditsOptions = paths["/3/tv/{series_id}/credits"]["get"]["parameters"]["query"];
+type GetTvCreditsOptionsApiResponse =
+  paths["/3/tv/{series_id}/credits"]["get"]["parameters"]["query"];
+export type GetTvCreditsOptions = CamelCase<GetTvCreditsOptionsApiResponse>;
 
-export type GetTvImagesOptions = paths["/3/tv/{series_id}/images"]["get"]["parameters"]["query"];
+type GetTvImagesOptionsApiResponse =
+  paths["/3/tv/{series_id}/images"]["get"]["parameters"]["query"];
+export type GetTvImagesOptions = CamelCase<GetTvImagesOptionsApiResponse>;
 
-export type GetRecommendedTvShowsOptions =
+type GetRecommendedTvShowsOptionsApiResponse =
   paths["/3/tv/{series_id}/recommendations"]["get"]["parameters"]["query"];
+export type GetRecommendedTvShowsOptions = CamelCase<GetRecommendedTvShowsOptionsApiResponse>;
 
-export type GetSimilarTvShowsOptions =
+type GetSimilarTvShowsOptionsApiResponse =
   paths["/3/tv/{series_id}/similar"]["get"]["parameters"]["query"];
+export type GetSimilarTvShowsOptions = CamelCase<GetSimilarTvShowsOptionsApiResponse>;

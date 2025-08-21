@@ -47,7 +47,6 @@ import type {
 import type { GetTrendingAllOptions, TrendingAll } from "./modules/trending/types";
 
 import type {
-  GetConfigurationOptions,
   GetCountriesOptions,
   TMDBConfiguration,
   Country,
@@ -87,7 +86,7 @@ export class TMDB {
   };
 
   readonly configuration: {
-    get: (options?: GetConfigurationOptions) => Promise<TMDBConfiguration>;
+    get: () => Promise<TMDBConfiguration>;
     countries: (options?: GetCountriesOptions) => Promise<Country[]>;
     jobs: () => Promise<JobGroup[]>;
     languages: () => Promise<Language[]>;
