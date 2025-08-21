@@ -1,42 +1,48 @@
 import type { paths } from "../../generated/tmdb";
+import type { CamelCase } from "../../shared/types";
 
-export type TrendingAll =
+type TrendingAllApiResponse =
   paths["/3/trending/all/{time_window}"]["get"]["responses"]["200"]["content"]["application/json"];
+export type TrendingAll = CamelCase<TrendingAllApiResponse>;
 
-export type TrendingMovies =
+type TrendingMoviesApiResponse =
   paths["/3/trending/movie/{time_window}"]["get"]["responses"]["200"]["content"]["application/json"];
+export type TrendingMovies = CamelCase<TrendingMoviesApiResponse>;
 
-export type TrendingTvShows =
+type TrendingTvShowsApiResponse =
   paths["/3/trending/tv/{time_window}"]["get"]["responses"]["200"]["content"]["application/json"];
+export type TrendingTvShows = CamelCase<TrendingTvShowsApiResponse>;
 
-export type TrendingPeople =
+type TrendingPeopleApiResponse =
   paths["/3/trending/person/{time_window}"]["get"]["responses"]["200"]["content"]["application/json"];
+export type TrendingPeople = CamelCase<TrendingPeopleApiResponse>;
 
 export type TrendingAllItem = NonNullable<TrendingAll["results"]>[number];
-
-export type TrendingMovie = NonNullable<TrendingMovies["results"]>[number] & {
-  media_type: "movie";
-};
-
-export type TrendingTvShow = NonNullable<TrendingTvShows["results"]>[number] & { media_type: "tv" };
-
-export type TrendingPerson = NonNullable<TrendingPeople["results"]>[number] & {
-  media_type: "person";
-};
-
+export type TrendingMovie = NonNullable<TrendingMovies["results"]>[number] & { mediaType: "movie" };
+export type TrendingTvShow = NonNullable<TrendingTvShows["results"]>[number] & { mediaType: "tv" };
+export type TrendingPerson = NonNullable<TrendingPeople["results"]>[number] & { mediaType: "person" };
 export type TrendingMedia = TrendingMovie | TrendingTvShow | TrendingPerson;
 
 export type TrendingTimeWindow =
-  paths["/3/trending/all/{time_window}"]["get"]["parameters"]["path"]["time_window"]; // "day" | "week"
+  paths["/3/trending/all/{time_window}"]["get"]["parameters"]["path"]["time_window"];
 
-export type GetTrendingAllOptions =
+type GetTrendingAllOptionsApiResponse =
   paths["/3/trending/all/{time_window}"]["get"]["parameters"]["query"];
+export type GetTrendingAllOptions = CamelCase<GetTrendingAllOptionsApiResponse>;
 
-export type GetTrendingMovieOptions =
+type GetTrendingMovieOptionsApiResponse =
   paths["/3/trending/movie/{time_window}"]["get"]["parameters"]["query"];
+export type GetTrendingMovieOptions = CamelCase<GetTrendingMovieOptionsApiResponse>;
 
-export type GetTrendingTvOptions =
+type GetTrendingTvOptionsApiResponse =
   paths["/3/trending/tv/{time_window}"]["get"]["parameters"]["query"];
+export type GetTrendingTvOptions = CamelCase<GetTrendingTvOptionsApiResponse>;
 
-export type GetTrendingPersonOptions =
+type GetTrendingPersonOptionsApiResponse =
   paths["/3/trending/person/{time_window}"]["get"]["parameters"]["query"];
+export type GetTrendingPersonOptions = CamelCase<GetTrendingPersonOptionsApiResponse>;
+
+
+
+
+

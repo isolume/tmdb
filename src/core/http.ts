@@ -1,6 +1,8 @@
 import type { TMDBOptions } from "../shared/common";
 import { TMDBError, type TMDBErrorBody } from "./errors";
 
+import { toCamelCase } from "../shared/parser";
+
 const DEFAULT_BASE_URL = "https://api.themoviedb.org/3";
 
 /**
@@ -149,7 +151,8 @@ export class HttpClient {
     }
 
     try {
-      return (await response.json()) as T;
+      const rawJson = await response.json();
+      return toCamelCase<T>(rawJson);
     } catch {
       throw new TMDBError("Failed to parse JSON response from TMDB", { status: response.status });
     }

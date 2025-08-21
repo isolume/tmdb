@@ -19,7 +19,12 @@
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "noEmitOnError": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true
   },
-  "include": ["src/**/*", ],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "tests", "examples"]
 }

@@ -9,6 +9,6 @@ export default defineConfig({
   treeshake: true,
   splitting: true,
   minify: false,
-  target: "es2021",
+  target: "es2022",
   external: ["node:*"],
 });

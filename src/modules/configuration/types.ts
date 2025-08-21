@@ -1,42 +1,24 @@
 import type { paths } from "../../generated/tmdb";
+import type { CamelCase } from "../../shared/types";
 
-export type TMDBConfiguration =
+type TMDBConfigurationApiResponse =
   paths["/3/configuration"]["get"]["responses"]["200"]["content"]["application/json"];
+export type TMDBConfiguration = CamelCase<TMDBConfigurationApiResponse>;
 
-export type Country =
+type CountryApiResponse =
   paths["/3/configuration/countries"]["get"]["responses"]["200"]["content"]["application/json"][number];
+export type Country = CamelCase<CountryApiResponse>;
 
-export type Language =
+type LanguageApiResponse =
   paths["/3/configuration/languages"]["get"]["responses"]["200"]["content"]["application/json"][number];
+export type Language = CamelCase<LanguageApiResponse>;
 
-export type JobGroup =
+type JobGroupApiResponse =
   paths["/3/configuration/jobs"]["get"]["responses"]["200"]["content"]["application/json"][number];
+export type JobGroup = CamelCase<JobGroupApiResponse>;
 
-export type TimezoneGroup =
+type TimezoneGroupApiResponse =
   paths["/3/configuration/timezones"]["get"]["responses"]["200"]["content"]["application/json"][number];
+export type TimezoneGroup = CamelCase<TimezoneGroupApiResponse>;
 
-export type GetConfigurationOptions = paths["/3/configuration"]["get"]["parameters"] extends {
-  query: infer Q;
-}
-  ? Q
-  : never;
-
-export type GetCountriesOptions = { language?: string }; //missing in spec, manual addition
-
-export type GetLanguagesOptions = paths["/3/configuration/languages"]["get"]["parameters"] extends {
-  query: infer Q;
-}
-  ? Q
-  : never;
-
-export type GetJobsOptions = paths["/3/configuration/jobs"]["get"]["parameters"] extends {
-  query: infer Q;
-}
-  ? Q
-  : never;
-
-export type GetTimezonesOptions = paths["/3/configuration/timezones"]["get"]["parameters"] extends {
-  query: infer Q;
-}
-  ? Q
-  : never;
+export type GetCountriesOptions = { language?: string };

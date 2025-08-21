@@ -1,38 +1,51 @@
 import type { paths } from "../../generated/tmdb";
+import type { CamelCase } from "../../shared/types";
 
-export type Movie =
+type MovieApiResponse =
   paths["/3/movie/{movie_id}"]["get"]["responses"]["200"]["content"]["application/json"];
+export type Movie = CamelCase<MovieApiResponse>;
 
-export type MovieCredits =
+type MovieCreditsApiResponse =
   paths["/3/movie/{movie_id}/credits"]["get"]["responses"]["200"]["content"]["application/json"];
+export type MovieCredits = CamelCase<MovieCreditsApiResponse>;
 
-export type MovieImages =
+type MovieImagesApiResponse =
   paths["/3/movie/{movie_id}/images"]["get"]["responses"]["200"]["content"]["application/json"];
+export type MovieImages = CamelCase<MovieImagesApiResponse>;
 
-export type SimilarMovies =
+type SimilarMoviesApiResponse =
   paths["/3/movie/{movie_id}/similar"]["get"]["responses"]["200"]["content"]["application/json"];
+export type SimilarMovies = CamelCase<SimilarMoviesApiResponse>;
 
 export type RecommendedMovies = SimilarMovies;
 
-export type ImageFile =
-  | NonNullable<MovieImages["backdrops"]>[number]
-  | NonNullable<MovieImages["posters"]>[number]
-  | NonNullable<MovieImages["logos"]>[number];
+type ImageFileApiResponse =
+  | NonNullable<MovieImagesApiResponse["backdrops"]>[number]
+  | NonNullable<MovieImagesApiResponse["posters"]>[number]
+  | NonNullable<MovieImagesApiResponse["logos"]>[number];
+export type ImageFile = CamelCase<ImageFileApiResponse>;
 
-export type RecommendedMovie = NonNullable<RecommendedMovies["results"]>[number];
+type RecommendedMovieApiResponse = NonNullable<SimilarMoviesApiResponse["results"]>[number];
+export type RecommendedMovie = CamelCase<RecommendedMovieApiResponse>;
 
-export type SimilarMovie = NonNullable<SimilarMovies["results"]>[number];
+type SimilarMovieApiResponse = NonNullable<SimilarMoviesApiResponse["results"]>[number];
+export type SimilarMovie = CamelCase<SimilarMovieApiResponse>;
 
-export type GetMovieOptions = paths["/3/movie/{movie_id}"]["get"]["parameters"]["query"];
+type GetMovieOptionsApiResponse = paths["/3/movie/{movie_id}"]["get"]["parameters"]["query"];
+export type GetMovieOptions = CamelCase<GetMovieOptionsApiResponse>;
 
-export type GetMovieCreditsOptions =
+type GetMovieCreditsOptionsApiResponse =
   paths["/3/movie/{movie_id}/credits"]["get"]["parameters"]["query"];
+export type GetMovieCreditsOptions = CamelCase<GetMovieCreditsOptionsApiResponse>;
 
-export type GetMovieImagesOptions =
+type GetMovieImagesOptionsApiResponse =
   paths["/3/movie/{movie_id}/images"]["get"]["parameters"]["query"];
+export type GetMovieImagesOptions = CamelCase<GetMovieImagesOptionsApiResponse>;
 
-export type GetRecommendedMoviesOptions =
+type GetRecommendedMoviesOptionsApiResponse =
   paths["/3/movie/{movie_id}/recommendations"]["get"]["parameters"]["query"];
+export type GetRecommendedMoviesOptions = CamelCase<GetRecommendedMoviesOptionsApiResponse>;
 
-export type GetSimilarMoviesOptions =
+type GetSimilarMoviesOptionsApiResponse =
   paths["/3/movie/{movie_id}/similar"]["get"]["parameters"]["query"];
+export type GetSimilarMoviesOptions = CamelCase<GetSimilarMoviesOptionsApiResponse>;
