@@ -22,10 +22,6 @@ export type TvSearchResult = NonNullable<TvSearchResults["results"]>[number];
 export type PersonSearchResult = NonNullable<PeopleSearchResults["results"]>[number];
 export type MultiSearchResult = NonNullable<MultiSearchResults["results"]>[number];
 
-export type MultiSearchMovie = Extract<MultiSearchResult, { mediaType: "movie" }>;
-export type MultiSearchTv = Extract<MultiSearchResult, { mediaType: "tv" }>;
-export type MultiSearchPerson = Extract<MultiSearchResult, { mediaType: "person" }>;
-
 type GetMovieSearchOptionsApiResponse = Omit<
   paths["/3/search/movie"]["get"]["parameters"]["query"],
   "query"
