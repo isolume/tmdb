@@ -122,39 +122,39 @@ export class TMDB {
     const configuration = new ConfigurationService(this.http);
 
     this.movies = {
-      get: (id, options) => movies.get(id, options),
-      credits: (id, options) => movies.credits(id, options),
-      images: (id, options) => movies.images(id, options),
-      recommendations: (id, options) => movies.recommendations(id, options),
-      similar: (id, options) => movies.similar(id, options),
+      get: movies.get.bind(movies),
+      credits: movies.credits.bind(movies),
+      images: movies.images.bind(movies),
+      recommendations: movies.recommendations.bind(movies),
+      similar: movies.similar.bind(movies),
     };
 
     this.tv = {
-      get: (id, options) => tv.getById(id, options),
-      credits: (id, options) => tv.credits(id, options),
-      images: (id, options) => tv.images(id, options),
-      recommendations: (id, options) => tv.recommendations(id, options),
-      similar: (id, options) => tv.similar(id, options),
+      get: tv.get.bind(tv),
+      credits: tv.credits.bind(tv),
+      images: tv.images.bind(tv),
+      recommendations: tv.recommendations.bind(tv),
+      similar: tv.similar.bind(tv),
     };
 
     this.trending = {
-      daily: (options) => trending.getDailyTrending(options),
-      weekly: (options) => trending.getWeeklyTrending(options),
+      daily: trending.getDailyTrending.bind(trending),
+      weekly: trending.getWeeklyTrending.bind(trending),
     };
 
     this.configuration = {
-      get: (options) => configuration.getConfig(options),
-      countries: (options) => configuration.countries(options),
-      jobs: () => configuration.jobs(),
-      languages: () => configuration.languages(),
-      timezones: () => configuration.timezones(),
+      get: configuration.getConfig.bind(configuration),
+      countries: configuration.countries.bind(configuration),
+      jobs: configuration.jobs.bind(configuration),
+      languages: configuration.languages.bind(configuration),
+      timezones: configuration.timezones.bind(configuration),
     };
 
     this.search = {
-      movies: (q, options) => search.searchMovies(q, options),
-      tv: (q, options) => search.searchTv(q, options),
-      people: (q, options) => search.searchPeople(q, options),
-      multi: (q, options) => search.searchMulti(q, options),
+      movies: search.searchMovies.bind(search),
+      tv: search.searchTv.bind(search),
+      people: search.searchPeople.bind(search),
+      multi: search.searchMulti.bind(search),
     };
   }
 }

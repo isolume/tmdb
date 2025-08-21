@@ -1,4 +1,5 @@
 import type { HttpClient } from "../../core";
+import { validateQuery } from "../../shared/validation";
 import type {
   MovieSearchResults,
   TvSearchResults,
@@ -19,7 +20,7 @@ export class SearchService {
   constructor(private readonly http: HttpClient) {}
 
   async searchMovies(query: string, options?: GetMovieSearchOptions): Promise<MovieSearchResults> {
-    this.validateQuery(query);
+    validateQuery(query);
     return this.http.get<MovieSearchResults>("/search/movie", {
       query: query.trim(),
       ...options,
@@ -27,7 +28,7 @@ export class SearchService {
   }
 
   async searchTv(query: string, options?: GetTvSearchOptions): Promise<TvSearchResults> {
-    this.validateQuery(query);
+    validateQuery(query);
     return this.http.get<TvSearchResults>("/search/tv", {
       query: query.trim(),
       ...options,
@@ -38,7 +39,7 @@ export class SearchService {
     query: string,
     options?: GetPeopleSearchOptions
   ): Promise<PeopleSearchResults> {
-    this.validateQuery(query);
+    validateQuery(query);
     return this.http.get<PeopleSearchResults>("/search/person", {
       query: query.trim(),
       ...options,
@@ -46,16 +47,10 @@ export class SearchService {
   }
 
   async searchMulti(query: string, options?: GetMultiSearchOptions): Promise<MultiSearchResults> {
-    this.validateQuery(query);
+    validateQuery(query);
     return this.http.get<MultiSearchResults>("/search/multi", {
       query: query.trim(),
       ...options,
     });
-  }
-
-  private validateQuery(query: string): void {
-    if (!query?.trim()) {
-      throw new Error("Search query cannot be empty");
-    }
   }
 }
