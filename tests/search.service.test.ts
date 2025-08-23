@@ -35,7 +35,7 @@ describe("SearchService (unit)", () => {
     const spy = vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.search.movies("inception", { page: 1, include_adult: false });
+    const res = await tmdb.search.movies("inception", { page: 1, includeAdult: false });
 
     expect(res.page).toBe(1);
     expect(Array.isArray(res.results)).toBe(true);
@@ -45,7 +45,7 @@ describe("SearchService (unit)", () => {
     expect(calledUrl.pathname).toMatch(/\/search\/movie$/);
     expect(calledUrl.searchParams.get("query")).toBe("inception");
     expect(calledUrl.searchParams.get("page")).toBe("1");
-    expect(calledUrl.searchParams.get("include_adult")).toBe("false");
+    expect(calledUrl.searchParams.get("includeAdult")).toBe("false");
   });
 
   it("searchTv returns paged tv results", async () => {
@@ -67,7 +67,7 @@ describe("SearchService (unit)", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });
-    const res = await tmdb.search.tv("game of thrones", { first_air_date_year: 2011 });
+    const res = await tmdb.search.tv("game of thrones", { firstAirDateYear: 2011 });
 
     expect(res.results && res.results.length > 0 && res.results[0].name).toBe("Game of Thrones");
   });
@@ -112,7 +112,7 @@ describe("SearchService (unit)", () => {
     const res = await tmdb.search.multi("a");
 
     expect(res.results && res.results.length).toBe(3);
-    const types = res.results ? res.results.map((r: MultiSearchResult) => r.media_type) : [];
+    const types = res.results ? res.results.map((r: MultiSearchResult) => r.mediaType) : [];
     expect(types).toContain("movie");
     expect(types).toContain("tv");
     expect(types).toContain("person");
