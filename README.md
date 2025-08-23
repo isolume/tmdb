@@ -115,6 +115,16 @@ const weeklyTrending = await tmdb.trending.weekly();
 const config = await tmdb.configuration.get();
 const countries = await tmdb.configuration.countries();
 ```
+### Person
+
+```typescript
+// Get person details
+const person = await tmdb.person.get(287); // Christian Bale
+
+// Get images and combined credits
+const images = await tmdb.person.images(287);
+const credits = await tmdb.person.combinedCredits(287);
+```
 
 ## Error Handling
 
