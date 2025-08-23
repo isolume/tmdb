@@ -2,7 +2,11 @@ import { describe, it, expect, vi } from "vitest";
 import { TMDB } from "../src";
 
 function jsonResponse(data: unknown, init?: ResponseInit) {
-  return new Response(JSON.stringify(data), { status: 200, headers: { "Content-Type": "application/json" }, ...init });
+  return new Response(JSON.stringify(data), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+    ...init,
+  });
 }
 
 describe("MovieService", () => {
@@ -18,7 +22,12 @@ describe("MovieService", () => {
   });
 
   it("recommendations returns paged results", async () => {
-    const sample = { page: 1, total_pages: 3, total_results: 60, results: [{ id: 1, title: "Other" }] };
+    const sample = {
+      page: 1,
+      total_pages: 3,
+      total_results: 60,
+      results: [{ id: 1, title: "Other" }],
+    };
     vi.spyOn(globalThis, "fetch").mockResolvedValue(jsonResponse(sample));
 
     const tmdb = new TMDB({ apiKey: "ABC" });

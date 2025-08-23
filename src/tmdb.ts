@@ -55,7 +55,16 @@ import type {
   TimezoneGroup,
 } from "./modules/configuration/types";
 
+import type {
+  GetPersonOptions,
+  Person,
+  PersonImages,
+  GetPersonCombinedCreditsOptions,
+  PersonCombinedCredits,
+} from "./modules/person/types";
+
 import type { TMDBOptions } from "./shared/common";
+import { PersonService } from "./modules/person/service";
 
 export class TMDB {
   readonly movies: {
@@ -100,6 +109,15 @@ export class TMDB {
     multi: (query: string, options?: GetMultiSearchOptions) => Promise<MultiSearchResults>;
   };
 
+  readonly person: {
+    get: (id: number, options?: GetPersonOptions) => Promise<Person>;
+    images: (id: number) => Promise<PersonImages>;
+    combinedCredits: (
+      id: number,
+      options?: GetPersonCombinedCreditsOptions
+    ) => Promise<PersonCombinedCredits>;
+  };
+
   private readonly http: HttpClient;
 
   constructor(opts: TMDBOptions) {
@@ -119,6 +137,13 @@ export class TMDB {
     const search = new SearchService(this.http);
     const trending = new TrendingService(this.http);
     const configuration = new ConfigurationService(this.http);
+    const person = new PersonService(this.http);
+
+    this.person = {
+      get: person.get.bind(person),
+      images: person.images.bind(person),
+      combinedCredits: person.combinedCredits.bind(person),
+    };
 
     this.movies = {
       get: movies.get.bind(movies),

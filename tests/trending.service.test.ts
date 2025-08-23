@@ -35,12 +35,12 @@ describe("TrendingService", () => {
     const res = await tmdb.trending.daily({ language: "en-US" });
 
     expect(res.page).toBe(1);
-    expect(res.total_results).toBe(200);
+    expect(res.totalResults).toBe(200);
     expect(Array.isArray(res.results)).toBe(true);
     if (res.results && res.results.length > 2) {
-      expect(res.results[0].media_type).toBe("movie");
-      expect(res.results[1].media_type).toBe("tv");
-      expect(res.results[2].media_type).toBe("person");
+      expect(res.results[0].mediaType).toBe("movie");
+      expect(res.results[1].mediaType).toBe("tv");
+      expect(res.results[2].mediaType).toBe("person");
     }
   });
 
@@ -65,10 +65,10 @@ describe("TrendingService", () => {
     const res = await tmdb.trending.weekly({ language: "en-US" });
 
     expect(res.page).toBe(2);
-    expect(res.total_pages).toBe(3);
+    expect(res.totalPages).toBe(3);
     expect(res.results && res.results.length).toBe(1);
     if (res.results && res.results.length > 0) {
-      expect(res.results[0].media_type).toBe("movie");
+      expect(res.results[0].mediaType).toBe("movie");
       expect(res.results[0].id).toBe(101);
     }
   });
@@ -98,9 +98,9 @@ describe("TrendingService", () => {
     const res = await tmdb.trending.daily({});
 
     if (res.results && res.results.length > 0) {
-      expect(res.results[0].media_type).toBe("person");
+      expect(res.results[0].mediaType).toBe("person");
       const person = res.results[0];
-      if (person.media_type === "person" && "name" in person) {
+      if (person.mediaType === "person" && "name" in person) {
         expect(person.name).toBe("Famous Actor");
         if ("known_for" in person) {
           expect(Array.isArray(person.known_for)).toBe(true);
